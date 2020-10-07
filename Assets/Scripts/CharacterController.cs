@@ -5,26 +5,27 @@ using UnityEngine;
 public class CharacterController : MonoBehaviour
 {
     [SerializeField]
-    private float maxSpeed = 5f;
+    private float movementSpeed = 5f;
 
     [SerializeField]
     private float jumpHeight = 5f;
 
-    [SerializeField]
-    private bool onGround = false;
+    public bool playerOnGround = false;
 
+    private Rigidbody2D rigidbody;
     private Vector2 input;
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        rigidbody = GetComponent<Rigidbody2D>();
     }
 
     private void FixedUpdate()
     {
         Vector3 movement = new Vector3(input.x, 0, 0);
-        transform.position += movement * Time.deltaTime * maxSpeed;
+        transform.position += movement * Time.deltaTime * movementSpeed;
+        Jump();
     }
 
     // Update is called once per frame
@@ -32,30 +33,15 @@ public class CharacterController : MonoBehaviour
     {
         input.x = Input.GetAxisRaw("Horizontal");
         input.y = Input.GetAxisRaw("Vertical");
-        Jump();
     }
 
     void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.W) && onGround)
-        {
-            gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, jumpHeight), ForceMode2D.Impulse);
-        }
-    }
+        var jumpVector = new Vector2(0f, jumpHeight);
 
-    private void OnCollisionStay2D(Collision2D other)
-    {
-        if (other.gameObject.CompareTag("Ground"))
+        if (Input.GetKey(KeyCode.W) && playerOnGround)
         {
-            onGround = true;
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D other)
-    {
-        if (other.gameObject.CompareTag("Ground"))
-        {
-            onGround = false;
+            rigidbody.AddForce(jumpVector, ForceMode2D.Impulse);
         }
     }
 }
