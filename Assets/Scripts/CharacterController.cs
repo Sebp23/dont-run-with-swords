@@ -10,19 +10,22 @@ public class CharacterController : MonoBehaviour
     [SerializeField]
     private float jumpHeight = 5f;
 
-    private bool facingRight = true;
+    public bool facingRight = true;
 
     public bool playerOnGround = false;
 
     private Rigidbody2D rigidbody;
     private SpriteRenderer playerSpriteRenderer;
     private Vector2 input;
+
+    private ThrowSword throwSwordScript;
     
     // Start is called before the first frame update
     void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
         playerSpriteRenderer = GetComponent<SpriteRenderer>();
+        throwSwordScript = GetComponent<ThrowSword>();
     }
 
     private void FixedUpdate()
