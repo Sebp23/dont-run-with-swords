@@ -18,14 +18,12 @@ public class CharacterController : MonoBehaviour
     private SpriteRenderer playerSpriteRenderer;
     private Vector2 input;
 
-    private ThrowSword throwSwordScript;
     
     // Start is called before the first frame update
     void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
         playerSpriteRenderer = GetComponent<SpriteRenderer>();
-        throwSwordScript = GetComponent<ThrowSword>();
     }
 
     private void FixedUpdate()
@@ -57,17 +55,14 @@ public class CharacterController : MonoBehaviour
     {
         //Credit: https://answers.unity.com/questions/1604524/character-facing-the-position-of-mouse-cursor-2d-p.html
 
-        // using mousePosition and player's transform (on orthographic camera view)
-        var delta = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-
-        if (delta.x >= 0 && !facingRight)
-        { // mouse is on right side of player
-            transform.localScale = new Vector3(1, 1, 1); // or activate look right some other way
+        if (input.x > 0 && !facingRight)
+        {
+            transform.Rotate(0f, 180f, 0);
             facingRight = true;
         }
-        else if (delta.x < 0 && facingRight)
-        { // mouse is on left side
-            transform.localScale = new Vector3(-1, 1, 1); // activate looking left
+        else if (input.x < 0 && facingRight)
+        {
+            transform.Rotate(0f, 180f, 0);
             facingRight = false;
         }
     }
