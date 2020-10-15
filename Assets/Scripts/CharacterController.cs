@@ -10,6 +10,12 @@ public class CharacterController : MonoBehaviour
     [SerializeField]
     private float jumpHeight = 5f;
 
+    [SerializeField]
+    private GameObject playerSpawn;
+
+    [SerializeField]
+    private GameObject respawnObject;
+
     public bool facingRight = true;
 
     public bool playerOnGround = false;
@@ -24,6 +30,8 @@ public class CharacterController : MonoBehaviour
     {
         rigidbody = GetComponent<Rigidbody2D>();
         playerSpriteRenderer = GetComponent<SpriteRenderer>();
+        //playerSpawn = GameObject.Find("Player Spawn").GetComponent<GameObject>();
+        //respawnObject = GameObject.Find("Respawn Object").GetComponent<GameObject>();
     }
 
     private void FixedUpdate()
@@ -36,9 +44,16 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        input.x = Input.GetAxisRaw("Horizontal");
-        input.y = Input.GetAxisRaw("Vertical");
-        FaceMouse();
+        if (gameObject.transform.position.y <= respawnObject.transform.position.y)
+        {
+            gameObject.transform.position = playerSpawn.transform.position;
+        }
+        else
+        {
+            input.x = Input.GetAxisRaw("Horizontal");
+            input.y = Input.GetAxisRaw("Vertical");
+            ChangeSpriteDirection();
+        }
     }
 
     void Jump()
@@ -51,7 +66,7 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    void FaceMouse()
+    void ChangeSpriteDirection()
     {
         //Credit: https://answers.unity.com/questions/1604524/character-facing-the-position-of-mouse-cursor-2d-p.html
 
