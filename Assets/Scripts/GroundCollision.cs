@@ -16,7 +16,7 @@ public class GroundCollision : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Ground"))
         {
-            characterControllerScript.playerOnGround = true;
+            StartCoroutine(NoJump());
         }
     }
 
@@ -26,5 +26,11 @@ public class GroundCollision : MonoBehaviour
         {
             characterControllerScript.playerOnGround = false;
         }
+    }
+
+    private IEnumerator NoJump()
+    {
+        yield return new WaitForFixedUpdate();
+        characterControllerScript.playerOnGround = true;
     }
 }
