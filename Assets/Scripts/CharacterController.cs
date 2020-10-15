@@ -11,7 +11,7 @@ public class CharacterController : MonoBehaviour
     private float jumpHeight = 5f;
 
     [SerializeField]
-    private GameObject playerSpawn;
+    private Transform playerSpawn;
 
     [SerializeField]
     private GameObject respawnObject;
