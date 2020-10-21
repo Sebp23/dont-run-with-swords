@@ -9,6 +9,13 @@ public class ThrowSword : MonoBehaviour
     [SerializeField]
     private GameObject swordPrefab;
 
+    private Ammo ammoScript;
+
+    private void Start()
+    {
+        ammoScript = GameObject.Find("Ammo Message").GetComponent<Ammo>();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -20,7 +27,13 @@ public class ThrowSword : MonoBehaviour
 
     void Throw()
     {
-        //sword throwing logic
-        Instantiate(swordPrefab, swordThrowPoint.position, swordThrowPoint.rotation);
+        if (ammoScript.currentAmmo <= ammoScript.maxAmmo && ammoScript.currentAmmo > 0)
+        {
+            //sword throwing logic
+            Instantiate(swordPrefab, swordThrowPoint.position, swordThrowPoint.rotation);
+            ammoScript.currentAmmo--;
+        }
+        
+        
     }
 }
