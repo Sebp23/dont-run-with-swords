@@ -17,10 +17,13 @@ public class Sword : MonoBehaviour
         Destroy(gameObject, 5f);
     }
 
-    private void OnTriggerEnter2D(Collider2D hitInfo)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log(hitInfo.name);
-        Destroy(hitInfo.gameObject);
-        Destroy(gameObject);
+        if(other.tag == "Enemy")
+        {
+            Debug.Log(other.name);
+            Destroy(other.gameObject);
+            Destroy(gameObject);
+        }
     }
 }

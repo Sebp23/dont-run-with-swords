@@ -45,7 +45,7 @@ public class CharacterController : MonoBehaviour
     {
         if (gameObject.transform.position.y <= respawnObject.transform.position.y)
         {
-            gameObject.transform.position = playerSpawn.transform.position;
+            Respawn();
         }
         else
         {
@@ -63,6 +63,11 @@ public class CharacterController : MonoBehaviour
         {
             rigidbody.AddForce(jumpVector, ForceMode2D.Impulse);
         }
+    }
+
+    public void Respawn()
+    {
+        gameObject.transform.position = playerSpawn.transform.position;
     }
 
     void ChangeSpriteDirection()

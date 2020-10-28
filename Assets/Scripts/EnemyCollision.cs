@@ -14,7 +14,7 @@ public class EnemyCollision : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            gameObject.transform.position = characterControllerScript.playerSpawn.transform.position;
+            characterControllerScript.Respawn();
         }
     }
 }
