@@ -2,18 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sword : MonoBehaviour
+public class EnemySword : MonoBehaviour
 {
     [SerializeField]
     private float speed = 20f;
 
     private Rigidbody2D rigidbody;
+    private Transform target;
+    private Vector2 targetDirection;
+    //private Quaternion targetRotation;
 
     // Start is called before the first frame update
     void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
-        rigidbody.velocity = transform.right * speed;
+        target = GameObject.Find("Player").GetComponent<Transform>();
+        targetDirection = (target.transform.position - transform.position).normalized * speed;
+        rigidbody.velocity = new Vector2(targetDirection.x, targetDirection.y);
         Destroy(gameObject, 5f);
     }
 
