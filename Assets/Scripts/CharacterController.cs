@@ -10,7 +10,7 @@ public class CharacterController : MonoBehaviour
     [SerializeField]
     private float jumpHeight = 5f;
 
-    public Transform playerSpawn;
+    private Transform playerSpawn;
 
     [SerializeField]
     private GameObject respawnObject;
@@ -29,7 +29,7 @@ public class CharacterController : MonoBehaviour
     {
         rigidbody = GetComponent<Rigidbody2D>();
         playerSpriteRenderer = GetComponent<SpriteRenderer>();
-        //playerSpawn = GameObject.Find("Player Spawn").GetComponent<GameObject>();
+        playerSpawn = GameObject.Find("Player Spawn").GetComponent<Transform>();
         //respawnObject = GameObject.Find("Respawn Object").GetComponent<GameObject>();
     }
 

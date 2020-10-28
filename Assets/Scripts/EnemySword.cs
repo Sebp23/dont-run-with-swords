@@ -16,7 +16,7 @@ public class EnemySword : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        characterControllerScript = gameObject.GetComponent<CharacterController>();
+        characterControllerScript = GameObject.Find("Player").GetComponent<CharacterController>();
 
         rigidbody = GetComponent<Rigidbody2D>();
         target = GameObject.Find("Player").GetComponent<Transform>();

@@ -19,7 +19,7 @@ public class Sword : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == "Enemy")
+        if(other.tag == "Enemy" || other.tag == "Knight Enemy")
         {
             Debug.Log(other.name);
             Destroy(other.gameObject);
