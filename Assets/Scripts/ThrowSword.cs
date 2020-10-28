@@ -49,7 +49,7 @@ public class ThrowSword : MonoBehaviour
     IEnumerator EnemyThrow()
     {
         yield return new WaitForSeconds(3);
-        Instantiate(swordPrefab, swordThrowPoint.position, Quaternion.identity);
+        Instantiate(swordPrefab, swordThrowPoint.position, swordThrowPoint.rotation);
         waitedThreeSeconds = true;
 
     }

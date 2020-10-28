@@ -18,6 +18,11 @@ public class EnemySword : MonoBehaviour
         rigidbody = GetComponent<Rigidbody2D>();
         target = GameObject.Find("Player").GetComponent<Transform>();
         targetDirection = (target.transform.position - transform.position).normalized * speed;
+        Vector3 relativePos = target.transform.position - gameObject.transform.position;
+        Quaternion rotation = Quaternion.LookRotation(relativePos);
+        rotation.x = gameObject.transform.rotation.x;
+        rotation.y = gameObject.transform.rotation.y;
+        gameObject.transform.rotation = rotation;
         rigidbody.velocity = new Vector2(targetDirection.x, targetDirection.y);
         Destroy(gameObject, 5f);
     }

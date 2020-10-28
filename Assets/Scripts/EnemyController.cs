@@ -14,6 +14,7 @@ public class EnemyController : MonoBehaviour
     private float detectDistance;
 
     private bool movingLeft = true;
+    private bool facingRight = true;
     public bool playerDetected = false;
 
     [SerializeField]
@@ -66,6 +67,8 @@ public class EnemyController : MonoBehaviour
 
         if (!enemyRenderer.isVisible || distanceFromEnemy > detectDistance)
         {
+            playerDetected = false;
+
             transform.Translate(Vector2.left * speed * Time.deltaTime);
 
             RaycastHit2D groundInfo = Physics2D.Raycast(groundDetection.position, Vector2.down, distance);
@@ -85,6 +88,16 @@ public class EnemyController : MonoBehaviour
         }
         else if (enemyRenderer.isVisible && distanceFromEnemy <= detectDistance)
         {
+            if (playerTransform.position.x > gameObject.transform.position.x && !facingRight)
+            {
+                transform.Rotate(0f, 180f, 0);
+                facingRight = true;
+            }
+            else if (playerTransform.position.x < gameObject.transform.position.x && facingRight)
+            {
+                transform.Rotate(0f, 180f, 0);
+                facingRight = false;
+            }
             playerDetected = true;
         }
         

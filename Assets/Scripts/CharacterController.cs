@@ -15,7 +15,7 @@ public class CharacterController : MonoBehaviour
     [SerializeField]
     private GameObject respawnObject;
 
-    public bool facingRight = true;
+    private bool facingRight = true;
 
     public bool playerOnGround = false;
 
