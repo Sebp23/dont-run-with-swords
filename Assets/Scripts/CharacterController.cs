@@ -10,12 +10,12 @@ public class CharacterController : MonoBehaviour
     [SerializeField]
     private float jumpHeight = 5f;
 
-    public Transform playerSpawn;
+    private Transform playerSpawn;
 
     [SerializeField]
     private GameObject respawnObject;
 
-    public bool facingRight = true;
+    private bool facingRight = true;
 
     public bool playerOnGround = false;
 
@@ -29,7 +29,7 @@ public class CharacterController : MonoBehaviour
     {
         rigidbody = GetComponent<Rigidbody2D>();
         playerSpriteRenderer = GetComponent<SpriteRenderer>();
-        //playerSpawn = GameObject.Find("Player Spawn").GetComponent<GameObject>();
+        playerSpawn = GameObject.Find("Player Spawn").GetComponent<Transform>();
         //respawnObject = GameObject.Find("Respawn Object").GetComponent<GameObject>();
     }
 
@@ -45,7 +45,7 @@ public class CharacterController : MonoBehaviour
     {
         if (gameObject.transform.position.y <= respawnObject.transform.position.y)
         {
-            gameObject.transform.position = playerSpawn.transform.position;
+            Respawn();
         }
         else
         {
@@ -63,6 +63,11 @@ public class CharacterController : MonoBehaviour
         {
             rigidbody.AddForce(jumpVector, ForceMode2D.Impulse);
         }
+    }
+
+    public void Respawn()
+    {
+        gameObject.transform.position = playerSpawn.transform.position;
     }
 
     void ChangeSpriteDirection()

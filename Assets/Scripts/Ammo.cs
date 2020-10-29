@@ -6,10 +6,10 @@ using UnityEngine;
 public class Ammo : MonoBehaviour
 {
     [SerializeField]
-    public int maxAmmo = 5;
+    public float maxAmmo = 5;
     
     [SerializeField]
-    public int currentAmmo;
+    public float currentAmmo;
 
     private CanvasGroup canvasGroup;
     private TMP_Text messageText;

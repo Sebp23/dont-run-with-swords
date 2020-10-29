@@ -5,7 +5,9 @@ using UnityEngine;
 public class AmmoPickupCollision : MonoBehaviour
 {
     [SerializeField]
-    private int pickupAmount = 1;
+    private float pickupAmount = 1;
+
+    private bool ammoPickedUp = false;
 
     private Ammo ammoScript;
 
@@ -23,6 +25,7 @@ public class AmmoPickupCollision : MonoBehaviour
             if (ammoScript.currentAmmo < ammoScript.maxAmmo)
             {
                 ammoScript.currentAmmo += pickupAmount;
+                Debug.Log(pickupAmount);
             }
 
             Destroy(collision.gameObject);

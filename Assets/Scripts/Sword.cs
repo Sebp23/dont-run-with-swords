@@ -14,19 +14,16 @@ public class Sword : MonoBehaviour
     {
         rigidbody = GetComponent<Rigidbody2D>();
         rigidbody.velocity = transform.right * speed;
-        StartCoroutine(DestroySword());
+        Destroy(gameObject, 5f);
     }
 
-    private IEnumerator DestroySword()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        yield return new WaitForSeconds(5);
-        Destroy(gameObject);
-    }
-
-    private void OnTriggerEnter2D(Collider2D hitInfo)
-    {
-        Debug.Log(hitInfo.name);
-        Destroy(hitInfo.gameObject);
-        Destroy(gameObject);
+        if(other.tag == "Enemy" || other.tag == "Knight Enemy")
+        {
+            Debug.Log(other.name);
+            Destroy(other.gameObject);
+            Destroy(gameObject);
+        }
     }
 }

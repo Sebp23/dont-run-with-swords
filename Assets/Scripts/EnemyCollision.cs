@@ -12,9 +12,9 @@ public class EnemyCollision : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Knight Enemy")
         {
-            gameObject.transform.position = characterControllerScript.playerSpawn.transform.position;
+            characterControllerScript.Respawn();
         }
     }
 }
