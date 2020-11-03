@@ -14,10 +14,15 @@ public class CharacterController : MonoBehaviour
 
     [SerializeField]
     private GameObject respawnObject;
+    [SerializeField]
+    private Animation legsAnimation;
+    [SerializeField]
+    private AnimationClip walkClip, jumpClip;
 
     private bool facingRight = true;
 
     public bool playerOnGround = false;
+    //public bool isJumping;
 
     private Rigidbody2D rigidbody;
     private SpriteRenderer playerSpriteRenderer;
@@ -36,7 +41,15 @@ public class CharacterController : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 movement = new Vector3(input.x, 0, 0);
-        transform.position += movement * Time.deltaTime * movementSpeed;
+        if (input.x != 0)
+        {
+            if (playerOnGround)
+            {
+                legsAnimation.clip = walkClip;
+                legsAnimation.Play();
+            }
+            transform.position += movement * Time.deltaTime * movementSpeed;
+        }
         Jump();
     }
 
@@ -61,6 +74,8 @@ public class CharacterController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W) && playerOnGround)
         {
+            legsAnimation.clip = jumpClip;
+            legsAnimation.Play();
             rigidbody.velocity = new Vector2(jumpVector.x, 0f);
             rigidbody.AddForce(jumpVector, ForceMode2D.Impulse);
         }
