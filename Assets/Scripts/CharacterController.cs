@@ -61,6 +61,7 @@ public class CharacterController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W) && playerOnGround)
         {
+            rigidbody.velocity = new Vector2(jumpVector.x, 0f);
             rigidbody.AddForce(jumpVector, ForceMode2D.Impulse);
         }
     }
