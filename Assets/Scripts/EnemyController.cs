@@ -19,6 +19,11 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField]
     private Transform groundDetection;
+    //leaving this here until animator is finished in case animator fails
+    [SerializeField]
+    private Animation legsAnimation;
+    [SerializeField]
+    private AnimationClip walkClip;
 
     private Transform playerTransform;
     private Renderer enemyRenderer;
@@ -68,7 +73,9 @@ public class EnemyController : MonoBehaviour
         if (!enemyRenderer.isVisible || distanceFromEnemy > detectDistance)
         {
             playerDetected = false;
-
+            //leaving this here until animator is finished in case animator fails
+            legsAnimation.clip = walkClip;
+            legsAnimation.Play();
             transform.Translate(Vector2.left * speed * Time.deltaTime);
 
             RaycastHit2D groundInfo = Physics2D.Raycast(groundDetection.position, Vector2.down, distance);

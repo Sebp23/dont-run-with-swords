@@ -15,11 +15,18 @@ public class CharacterController : MonoBehaviour
     [SerializeField]
     private GameObject respawnObject;
 
+    //leaving this here until animator is finished in case animator fails
+    [SerializeField]
+    private Animation legsAnimation;
+    [SerializeField]
+    private AnimationClip walkClip, jumpClip;
+
     private bool facingRight = true;
 
     public bool playerOnGround = false;
+    //public bool isJumping;
 
-    private Rigidbody2D rigidbody;
+    public Rigidbody2D playerRB;
     private SpriteRenderer playerSpriteRenderer;
     private Vector2 input;
 
@@ -27,7 +34,7 @@ public class CharacterController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
+        playerRB = GetComponent<Rigidbody2D>();
         playerSpriteRenderer = GetComponent<SpriteRenderer>();
         playerSpawn = GameObject.Find("Player Spawn").GetComponent<Transform>();
         //respawnObject = GameObject.Find("Respawn Object").GetComponent<GameObject>();
@@ -36,7 +43,16 @@ public class CharacterController : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 movement = new Vector3(input.x, 0, 0);
-        transform.position += movement * Time.deltaTime * movementSpeed;
+        if (input.x != 0)
+        {
+            if (playerOnGround)
+            {
+                //leaving this here until animator is finished in case animator fails
+                legsAnimation.clip = walkClip;
+                legsAnimation.Play();
+            }
+            transform.position += movement * Time.deltaTime * movementSpeed;
+        }
         Jump();
     }
 
@@ -61,7 +77,11 @@ public class CharacterController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W) && playerOnGround)
         {
-            rigidbody.AddForce(jumpVector, ForceMode2D.Impulse);
+            //leaving this here until animator is finished in case animator fails
+            legsAnimation.clip = jumpClip;
+            legsAnimation.Play();
+            playerRB.velocity = new Vector2(jumpVector.x, 0f);
+            playerRB.AddForce(jumpVector, ForceMode2D.Impulse);
         }
     }
 
