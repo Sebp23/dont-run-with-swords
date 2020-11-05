@@ -26,7 +26,7 @@ public class CharacterController : MonoBehaviour
     public bool playerOnGround = false;
     //public bool isJumping;
 
-    private Rigidbody2D rigidbody;
+    public Rigidbody2D playerRB;
     private SpriteRenderer playerSpriteRenderer;
     private Vector2 input;
 
@@ -34,7 +34,7 @@ public class CharacterController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
+        playerRB = GetComponent<Rigidbody2D>();
         playerSpriteRenderer = GetComponent<SpriteRenderer>();
         playerSpawn = GameObject.Find("Player Spawn").GetComponent<Transform>();
         //respawnObject = GameObject.Find("Respawn Object").GetComponent<GameObject>();
@@ -80,8 +80,8 @@ public class CharacterController : MonoBehaviour
             //leaving this here until animator is finished in case animator fails
             //legsAnimation.clip = jumpClip;
             //legsAnimation.Play();
-            rigidbody.velocity = new Vector2(jumpVector.x, 0f);
-            rigidbody.AddForce(jumpVector, ForceMode2D.Impulse);
+            playerRB.velocity = new Vector2(jumpVector.x, 0f);
+            playerRB.AddForce(jumpVector, ForceMode2D.Impulse);
         }
     }
 
