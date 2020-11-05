@@ -16,10 +16,10 @@ public class CharacterController : MonoBehaviour
     private GameObject respawnObject;
 
     //leaving this here until animator is finished in case animator fails
-    /*[SerializeField]
+    [SerializeField]
     private Animation legsAnimation;
     [SerializeField]
-    private AnimationClip walkClip, jumpClip;*/
+    private AnimationClip walkClip, jumpClip;
 
     private bool facingRight = true;
 
@@ -48,8 +48,8 @@ public class CharacterController : MonoBehaviour
             if (playerOnGround)
             {
                 //leaving this here until animator is finished in case animator fails
-                //legsAnimation.clip = walkClip;
-                //legsAnimation.Play();
+                legsAnimation.clip = walkClip;
+                legsAnimation.Play();
             }
             transform.position += movement * Time.deltaTime * movementSpeed;
         }
@@ -78,8 +78,8 @@ public class CharacterController : MonoBehaviour
         if (Input.GetKey(KeyCode.W) && playerOnGround)
         {
             //leaving this here until animator is finished in case animator fails
-            //legsAnimation.clip = jumpClip;
-            //legsAnimation.Play();
+            legsAnimation.clip = jumpClip;
+            legsAnimation.Play();
             playerRB.velocity = new Vector2(jumpVector.x, 0f);
             playerRB.AddForce(jumpVector, ForceMode2D.Impulse);
         }
