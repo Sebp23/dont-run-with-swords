@@ -14,10 +14,12 @@ public class CharacterController : MonoBehaviour
 
     [SerializeField]
     private GameObject respawnObject;
-    //[SerializeField]
-    //private Animation legsAnimation;
-    //[SerializeField]
-    //private AnimationClip walkClip, jumpClip;
+
+    //leaving this here until animator is finished in case animator fails
+    /*[SerializeField]
+    private Animation legsAnimation;
+    [SerializeField]
+    private AnimationClip walkClip, jumpClip;*/
 
     private bool facingRight = true;
 
@@ -45,6 +47,7 @@ public class CharacterController : MonoBehaviour
         {
             if (playerOnGround)
             {
+                //leaving this here until animator is finished in case animator fails
                 //legsAnimation.clip = walkClip;
                 //legsAnimation.Play();
             }
@@ -74,6 +77,7 @@ public class CharacterController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W) && playerOnGround)
         {
+            //leaving this here until animator is finished in case animator fails
             //legsAnimation.clip = jumpClip;
             //legsAnimation.Play();
             rigidbody.velocity = new Vector2(jumpVector.x, 0f);
