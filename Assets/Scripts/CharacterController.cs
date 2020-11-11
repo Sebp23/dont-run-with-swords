@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class CharacterController : MonoBehaviour
 {
@@ -29,6 +30,7 @@ public class CharacterController : MonoBehaviour
     public Rigidbody2D playerRB;
     private SpriteRenderer playerSpriteRenderer;
     private Vector2 input;
+    private CinemachineVirtualCamera cinemachineCam;
 
     
     // Start is called before the first frame update
@@ -37,6 +39,7 @@ public class CharacterController : MonoBehaviour
         playerRB = GetComponent<Rigidbody2D>();
         playerSpriteRenderer = GetComponent<SpriteRenderer>();
         playerSpawn = GameObject.Find("Player Spawn").GetComponent<Transform>();
+        cinemachineCam = GameObject.Find("Player Camera").GetComponent<CinemachineVirtualCamera>();
         //respawnObject = GameObject.Find("Respawn Object").GetComponent<GameObject>();
     }
 
@@ -75,7 +78,7 @@ public class CharacterController : MonoBehaviour
     {
         var jumpVector = new Vector2(0f, jumpHeight);
 
-        if (Input.GetKey(KeyCode.W) && playerOnGround)
+        if ((Input.GetKey(KeyCode.W) || Input.GetButton("Jump")) && playerOnGround)
         {
             //leaving this here until animator is finished in case animator fails
             legsAnimation.clip = jumpClip;
@@ -88,6 +91,16 @@ public class CharacterController : MonoBehaviour
     public void Respawn()
     {
         gameObject.transform.position = playerSpawn.transform.position;
+        cinemachineCam.enabled = false;
+        cinemachineCam.Follow = playerSpawn.transform;
+        StartCoroutine(CameraRespawnWaitForSeconds());
+    }
+
+    IEnumerator CameraRespawnWaitForSeconds()
+    {
+        yield return new WaitForSeconds(0.1f);
+        cinemachineCam.Follow = gameObject.transform;
+        cinemachineCam.enabled = true;
     }
 
     void ChangeSpriteDirection()
