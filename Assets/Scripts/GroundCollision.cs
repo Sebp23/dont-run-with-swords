@@ -16,7 +16,7 @@ public class GroundCollision : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Ground"))
         {
-            characterControllerScript.playerOnGround = true;
+            characterControllerScript.PlayerOnGround = true;
         }
     }
 
@@ -24,7 +24,7 @@ public class GroundCollision : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Ground"))
         {
-            characterControllerScript.playerOnGround = false;
+            characterControllerScript.PlayerOnGround = false;
         }
     }
 }
