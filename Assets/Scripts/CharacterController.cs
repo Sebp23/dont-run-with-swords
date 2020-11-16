@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Cinemachine;
 
 public class CharacterController : MonoBehaviour
@@ -19,15 +20,24 @@ public class CharacterController : MonoBehaviour
     [SerializeField]
     private GameObject respawnObject;
 
-    //leaving this here until animator is finished in case animator fails
     [SerializeField]
-    private Animation legsAnimation;
-    [SerializeField]
-    private AnimationClip walkClip, jumpClip;
+    private GameObject playerBlade;
+
+    private int playerWalking = Animator.StringToHash(nameof(playerWalking));
+    private int playerOnGroundAnimParam = Animator.StringToHash(nameof(playerOnGround));
 
     private bool facingRight = true;
 
-    public bool playerOnGround = false;
+    private bool playerOnGround = false;
+    public bool PlayerOnGround
+    {
+        get { return playerOnGround; }
+        set
+        {
+            playerOnGround = value;
+            legsAnimator.SetBool(playerOnGroundAnimParam, playerOnGround);
+        }
+    }
 
     public Rigidbody2D playerRB;
     private playerState state;
@@ -35,7 +45,9 @@ public class CharacterController : MonoBehaviour
     private SpriteRenderer playerSpriteRenderer;
     private Vector2 input;
     private CinemachineVirtualCamera cinemachineCam;
+    private Animator legsAnimator;
     private Vector3 movement;
+    private Ammo ammoScript;
 
     
     // Start is called before the first frame update
@@ -45,15 +57,18 @@ public class CharacterController : MonoBehaviour
         playerSpriteRenderer = GetComponent<SpriteRenderer>();
         playerSpawn = GameObject.Find("Player Spawn").GetComponent<Transform>();
         cinemachineCam = GameObject.Find("Player Camera").GetComponent<CinemachineVirtualCamera>();
+        legsAnimator = GetComponentInChildren<Animator>();
         //respawnObject = GameObject.Find("Respawn Object").GetComponent<GameObject>();
+        playerBlade = transform.Find("PlayerBlade").gameObject;
+        ammoScript = GameObject.Find("Ammo Message").GetComponent<Ammo>();
 
-        GetPlayerState();
+        UpdatePlayerState();
     }
 
     private void FixedUpdate()
     {
-        //GetPlayerState();
-        ChangePlayerState();
+        UpdatePlayerState();
+        ExecutePlayerState();
     }
 
     // Update is called once per frame
@@ -71,84 +86,55 @@ public class CharacterController : MonoBehaviour
             input.y = Input.GetAxisRaw("Vertical");
             ChangeSpriteDirection();
         }
+
+        CheckAmmo();
     }
 
-    void GetPlayerState()
+    void UpdatePlayerState()
     {
         if (input.x != 0)
         {
             state = playerState.walking;
         }
-        else if ((Input.GetKey(KeyCode.W) || Input.GetButton("Jump")) && playerOnGround)
-        {
-            Debug.Log("Jump state");
-            state = playerState.jumping;
-        }
         else
         {
             state = playerState.still;
+        }
+        if (Input.GetButton("Jump") && playerOnGround)
+        {
+            Debug.Log("Jump state");
+            state = playerState.jumping;
         }
     }
 
     void PlayerWalk()
     {
-        if (playerOnGround)
-        {
-            legsAnimation.clip = walkClip;
-            legsAnimation.Play();
-        }
         transform.position += movement * Time.deltaTime * movementSpeed;
-        if ((Input.GetKey(KeyCode.W) || Input.GetButton("Jump")) && playerOnGround)
-        {
-            Debug.Log("Jump state");
-            state = playerState.jumping;
-        }
-        else if (input.x == 0)
-        {
-            state = playerState.still;
-        }
     }
 
     void PlayerJump()
     {
-        legsAnimation.clip = jumpClip;
-        legsAnimation.Play();
         var jumpVector = new Vector2(0f, jumpHeight);
-        if((Input.GetKey(KeyCode.W) || Input.GetButton("Jump")) && playerOnGround)
+        if(Input.GetButton("Jump") && playerOnGround)
         {
             playerRB.velocity = new Vector2(jumpVector.x, 0f);
             playerRB.AddForce(jumpVector, ForceMode2D.Impulse);
         }
-        if (input.x != 0 && playerOnGround)
-        {
-            state = playerState.walking;
-        }
-        else if (input.x == 0 && playerOnGround)
-        {
-            state = playerState.still;
-        }
     }
 
-    void PlayerStop()
-    {
-        legsAnimation.Stop();
-        if (input.x != 0 && playerOnGround)
-        {
-            state = playerState.walking;
-        }
-        else if ((Input.GetKey(KeyCode.W) || Input.GetButton("Jump")) && playerOnGround)
-        {
-            Debug.Log("Jump state");
-            state = playerState.jumping;
-        }
-    }
+    //void PlayerStop()
+    //{
+    //    //do something with this
+    //}
 
     public void Respawn()
     {
-        gameObject.transform.position = playerSpawn.transform.position;
-        cinemachineCam.enabled = false;
-        cinemachineCam.Follow = playerSpawn.transform;
-        StartCoroutine(CameraRespawnWaitForSeconds());
+        //gameObject.transform.position = playerSpawn.transform.position;
+        //cinemachineCam.enabled = false;
+        //cinemachineCam.Follow = playerSpawn.transform;
+        //StartCoroutine(CameraRespawnWaitForSeconds());
+
+        SceneManager.LoadScene(0);
     }
 
     IEnumerator CameraRespawnWaitForSeconds()
@@ -174,21 +160,33 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    private void ChangePlayerState()
+    void CheckAmmo()
+    {
+        if (ammoScript.currentAmmo == 0)
+        {
+            playerBlade.SetActive(false);
+        }
+        else
+        {
+            playerBlade.SetActive(true);
+        }
+    }
+
+    private void ExecutePlayerState()
     {
         switch (state)
         {
             case playerState.walking:
-                PlayerWalk();
+                legsAnimator.SetBool(playerWalking, true);
+                //PlayerWalk();
                 break;
             case playerState.jumping:
-                PlayerJump();
+                legsAnimator.SetBool(playerWalking, false);
+                //PlayerJump();
                 break;
             case playerState.still:
-                PlayerStop();
-                break;
-            default:
-                PlayerStop();
+                legsAnimator.SetBool(playerWalking, false);
+                //PlayerStop();
                 break;
         }
     }
