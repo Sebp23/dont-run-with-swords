@@ -122,10 +122,10 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    void PlayerStop()
-    {
-        //do something with this
-    }
+    //void PlayerStop()
+    //{
+    //    //do something with this
+    //}
 
     public void Respawn()
     {
@@ -178,15 +178,15 @@ public class CharacterController : MonoBehaviour
         {
             case playerState.walking:
                 legsAnimator.SetBool(playerWalking, true);
-                PlayerWalk();
+                //PlayerWalk();
                 break;
             case playerState.jumping:
                 legsAnimator.SetBool(playerWalking, false);
-                PlayerJump();
+                //PlayerJump();
                 break;
             case playerState.still:
                 legsAnimator.SetBool(playerWalking, false);
-                PlayerStop();
+                //PlayerStop();
                 break;
         }
     }
