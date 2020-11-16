@@ -74,8 +74,8 @@ public class EnemyController : MonoBehaviour
         {
             playerDetected = false;
             //leaving this here until animator is finished in case animator fails
-            legsAnimation.clip = walkClip;
-            legsAnimation.Play();
+            //legsAnimation.clip = walkClip;
+            //legsAnimation.Play();
             transform.Translate(Vector2.left * speed * Time.deltaTime);
 
             RaycastHit2D groundInfo = Physics2D.Raycast(groundDetection.position, Vector2.down, distance);
