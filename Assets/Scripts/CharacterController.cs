@@ -69,12 +69,6 @@ public class CharacterController : MonoBehaviour
         UpdatePlayerState();
     }
 
-    private void FixedUpdate()
-    {
-        //UpdatePlayerState();
-        //ExecutePlayerState();
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -128,19 +122,8 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    //void PlayerStop()
-    //{
-    //    //do something with this
-    //}
-
     public void Respawn()
     {
-        //gameObject.transform.position = playerSpawn.transform.position;
-        //cinemachineCam.enabled = false;
-        //cinemachineCam.Follow = playerSpawn.transform;
-        //StartCoroutine(CameraRespawnWaitForSeconds());
-
-        //reload the scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
@@ -193,7 +176,6 @@ public class CharacterController : MonoBehaviour
                 break;
             case playerState.still:
                 legsAnimator.SetBool(playerWalking, false);
-                //PlayerStop();
                 break;
         }
     }
