@@ -68,7 +68,7 @@ public class EnemyController : MonoBehaviour
 
     void KnightEnemyBehavior()
     {
-        float distanceFromEnemy = gameObject.transform.position.x - playerTransform.position.x;
+        float distanceFromEnemy = Mathf.Abs(gameObject.transform.position.x - playerTransform.position.x);
 
         if (!enemyRenderer.isVisible || distanceFromEnemy > detectDistance)
         {

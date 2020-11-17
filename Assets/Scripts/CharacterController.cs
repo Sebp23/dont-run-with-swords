@@ -71,14 +71,16 @@ public class CharacterController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        UpdatePlayerState();
-        ExecutePlayerState();
+        //UpdatePlayerState();
+        //ExecutePlayerState();
     }
 
     // Update is called once per frame
     void Update()
     {
         movement = new Vector3(input.x, 0, 0);
+        UpdatePlayerState();
+        ExecutePlayerState();
 
         if (gameObject.transform.position.y <= respawnObject.transform.position.y)
         {
@@ -104,7 +106,7 @@ public class CharacterController : MonoBehaviour
         {
             state = playerState.still;
         }
-        if (Input.GetButton("Jump") && playerOnGround)
+        if (Input.GetButtonDown("Jump") && playerOnGround)
         {
             Debug.Log("Jump state");
             state = playerState.jumping;
@@ -119,7 +121,7 @@ public class CharacterController : MonoBehaviour
     void PlayerJump()
     {
         var jumpVector = new Vector2(0f, jumpHeight);
-        if(Input.GetButton("Jump") && playerOnGround)
+        if(Input.GetButtonDown("Jump") && playerOnGround)
         {
             playerRB.velocity = new Vector2(jumpVector.x, 0f);
             playerRB.AddForce(jumpVector, ForceMode2D.Impulse);
