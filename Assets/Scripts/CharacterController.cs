@@ -48,6 +48,7 @@ public class CharacterController : MonoBehaviour
     private Animator legsAnimator;
     private Vector3 movement;
     private Ammo ammoScript;
+    private GameMaster gm;
 
     
     // Start is called before the first frame update
@@ -58,23 +59,22 @@ public class CharacterController : MonoBehaviour
         playerSpawn = GameObject.Find("Player Spawn").GetComponent<Transform>();
         cinemachineCam = GameObject.Find("Player Camera").GetComponent<CinemachineVirtualCamera>();
         legsAnimator = GetComponentInChildren<Animator>();
-        //respawnObject = GameObject.Find("Respawn Object").GetComponent<GameObject>();
         playerBlade = transform.Find("PlayerBlade").gameObject;
         ammoScript = GameObject.Find("Ammo Message").GetComponent<Ammo>();
+        gm = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
+
+        //spawn the player at the checkpoint position
+        gameObject.transform.position = gm.lastCheckPointPosition;
 
         UpdatePlayerState();
-    }
-
-    private void FixedUpdate()
-    {
-        UpdatePlayerState();
-        ExecutePlayerState();
     }
 
     // Update is called once per frame
     void Update()
     {
         movement = new Vector3(input.x, 0, 0);
+        UpdatePlayerState();
+        ExecutePlayerState();
 
         if (gameObject.transform.position.y <= respawnObject.transform.position.y)
         {
@@ -100,7 +100,7 @@ public class CharacterController : MonoBehaviour
         {
             state = playerState.still;
         }
-        if (Input.GetButton("Jump") && playerOnGround)
+        if (Input.GetButtonDown("Jump") && playerOnGround)
         {
             Debug.Log("Jump state");
             state = playerState.jumping;
@@ -115,26 +115,16 @@ public class CharacterController : MonoBehaviour
     void PlayerJump()
     {
         var jumpVector = new Vector2(0f, jumpHeight);
-        if(Input.GetButton("Jump") && playerOnGround)
+        if(Input.GetButtonDown("Jump") && playerOnGround)
         {
             playerRB.velocity = new Vector2(jumpVector.x, 0f);
             playerRB.AddForce(jumpVector, ForceMode2D.Impulse);
         }
     }
 
-    //void PlayerStop()
-    //{
-    //    //do something with this
-    //}
-
     public void Respawn()
     {
-        //gameObject.transform.position = playerSpawn.transform.position;
-        //cinemachineCam.enabled = false;
-        //cinemachineCam.Follow = playerSpawn.transform;
-        //StartCoroutine(CameraRespawnWaitForSeconds());
-
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     IEnumerator CameraRespawnWaitForSeconds()
@@ -178,15 +168,14 @@ public class CharacterController : MonoBehaviour
         {
             case playerState.walking:
                 legsAnimator.SetBool(playerWalking, true);
-                //PlayerWalk();
+                PlayerWalk();
                 break;
             case playerState.jumping:
                 legsAnimator.SetBool(playerWalking, false);
-                //PlayerJump();
+                PlayerJump();
                 break;
             case playerState.still:
                 legsAnimator.SetBool(playerWalking, false);
-                //PlayerStop();
                 break;
         }
     }
