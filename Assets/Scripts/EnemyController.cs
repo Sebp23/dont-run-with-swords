@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    //Code tutorial/source for this script: https://www.youtube.com/watch?v=aRxuKoJH9Y0&ab_channel=Blackthornprod
+    //Code tutorial/source for some of this script: https://www.youtube.com/watch?v=aRxuKoJH9Y0&ab_channel=Blackthornprod
 
     [SerializeField]
     private float speed;
@@ -19,14 +19,13 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField]
     private Transform groundDetection;
-    //leaving this here until animator is finished in case animator fails
-    [SerializeField]
-    private Animation legsAnimation;
-    [SerializeField]
-    private AnimationClip walkClip;
+    
+    private int enemyKnightWalking = Animator.StringToHash(nameof(enemyKnightWalking));
+
 
     private Transform playerTransform;
     private Renderer enemyRenderer;
+    private Animator enemyKnightLegsAnimator;
 
     private void Start()
     {
@@ -42,6 +41,7 @@ public class EnemyController : MonoBehaviour
         }
         else if (gameObject.tag == "Knight Enemy")
         {
+            enemyKnightLegsAnimator = GetComponentInChildren<Animator>();
             KnightEnemyBehavior();
         }
     }
@@ -73,9 +73,7 @@ public class EnemyController : MonoBehaviour
         if (!enemyRenderer.isVisible || distanceFromEnemy > detectDistance)
         {
             playerDetected = false;
-            //leaving this here until animator is finished in case animator fails
-            //legsAnimation.clip = walkClip;
-            //legsAnimation.Play();
+            enemyKnightLegsAnimator.SetBool(enemyKnightWalking, true);
             transform.Translate(Vector2.left * speed * Time.deltaTime);
 
             RaycastHit2D groundInfo = Physics2D.Raycast(groundDetection.position, Vector2.down, distance);
@@ -95,6 +93,8 @@ public class EnemyController : MonoBehaviour
         }
         else if (enemyRenderer.isVisible && distanceFromEnemy <= detectDistance)
         {
+            enemyKnightLegsAnimator.SetBool(enemyKnightWalking, false);
+
             if (playerTransform.position.x > gameObject.transform.position.x && !facingRight)
             {
                 transform.Rotate(0f, 180f, 0);
