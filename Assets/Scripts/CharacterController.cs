@@ -127,12 +127,12 @@ public class CharacterController : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    IEnumerator CameraRespawnWaitForSeconds()
-    {
-        yield return new WaitForSeconds(0.1f);
-        cinemachineCam.Follow = gameObject.transform;
-        cinemachineCam.enabled = true;
-    }
+    //IEnumerator CameraRespawnWaitForSeconds()
+    //{
+    //    yield return new WaitForSeconds(0.1f);
+    //    cinemachineCam.Follow = gameObject.transform;
+    //    cinemachineCam.enabled = true;
+    //}
 
     void ChangeSpriteDirection()
     {
