@@ -127,13 +127,6 @@ public class CharacterController : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    //IEnumerator CameraRespawnWaitForSeconds()
-    //{
-    //    yield return new WaitForSeconds(0.1f);
-    //    cinemachineCam.Follow = gameObject.transform;
-    //    cinemachineCam.enabled = true;
-    //}
-
     void ChangeSpriteDirection()
     {
         //Credit: https://answers.unity.com/questions/1604524/character-facing-the-position-of-mouse-cursor-2d-p.html

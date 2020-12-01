@@ -8,6 +8,8 @@ public class ThrowSword : MonoBehaviour
     private Transform swordThrowPoint;
     [SerializeField]
     private GameObject swordPrefab;
+    [SerializeField]
+    private AudioClip swordThrowSound;
 
     private bool waitedThreeSeconds = true;
 
@@ -15,11 +17,13 @@ public class ThrowSword : MonoBehaviour
 
     private Ammo ammoScript;
     private EnemyController enemyControllerScript;
+    private AudioSource objectAudio;
 
     private void Start()
     {
         ammoScript = GameObject.Find("Ammo Message").GetComponent<Ammo>();
         enemyControllerScript = gameObject.GetComponent<EnemyController>();
+        objectAudio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -40,6 +44,7 @@ public class ThrowSword : MonoBehaviour
     {
         if (ammoScript.currentAmmo <= ammoScript.maxAmmo && ammoScript.currentAmmo > 0)
         {
+            objectAudio.PlayOneShot(swordThrowSound);
             //sword throwing logic
             Instantiate(swordPrefab, swordThrowPoint.position, swordThrowPoint.rotation);
             ammoScript.currentAmmo--;
@@ -49,6 +54,7 @@ public class ThrowSword : MonoBehaviour
     IEnumerator EnemyThrow()
     {
         yield return new WaitForSeconds(2);
+        objectAudio.PlayOneShot(swordThrowSound);
         Instantiate(swordPrefab, swordThrowPoint.position, swordThrowPoint.rotation);
         waitedThreeSeconds = true;
 

@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyCollision : MonoBehaviour
 {
     private CharacterController characterControllerScript;
+
     private void Start()
     {
         characterControllerScript = gameObject.GetComponent<CharacterController>();
