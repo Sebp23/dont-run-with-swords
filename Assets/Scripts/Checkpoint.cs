@@ -7,12 +7,14 @@ public class Checkpoint : MonoBehaviour
     [SerializeField]
     private float rotateSpeed;
 
+    private Collider2D checkpointCollider;
     private GameMaster gm;
     private GameObject windmillBlades;
     private bool checkpointActivated = false;
 
     private void Start()
     {
+        checkpointCollider = gameObject.GetComponent<Collider2D>();
         gm = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
         windmillBlades = transform.Find("Windmill Blades").gameObject;
     }
@@ -32,6 +34,7 @@ public class Checkpoint : MonoBehaviour
             //the respawn position is equal to checkpoint position once player passes checkpoint.
             gm.lastCheckPointPosition = gameObject.transform.position;
             checkpointActivated = true;
+            checkpointCollider.enabled = false;
         }
     }
 }
