@@ -11,26 +11,34 @@ public class Ammo : MonoBehaviour
     [SerializeField]
     public float currentAmmo;
 
-    private CanvasGroup canvasGroup;
-    private TMP_Text messageText;
+    private TMP_Text ammoText;
+    private GameMaster gm;
 
     // Start is called before the first frame update
     void Start()
     {
         currentAmmo = 5;
 
-        canvasGroup = GetComponent<CanvasGroup>();
-        messageText = GetComponent<TMP_Text>();
+        ammoText = GetComponent<TMP_Text>();
+        gm = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        PrintAmmo();
+        if (!gm.isPaused)
+        {
+            ammoText.alpha = 1;
+            PrintAmmo();
+        }
+        else
+        {
+            ammoText.alpha = 0;
+        }
     }
 
     private void PrintAmmo()
     {
-        messageText.text = currentAmmo.ToString();
+        ammoText.text = currentAmmo.ToString();
     }
 }

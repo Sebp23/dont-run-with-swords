@@ -26,23 +26,28 @@ public class EnemyController : MonoBehaviour
     private Transform playerTransform;
     private Renderer enemyRenderer;
     private Animator enemyKnightLegsAnimator;
+    private GameMaster gm;
 
     private void Start()
     {
         enemyRenderer = gameObject.GetComponent<Renderer>();
         playerTransform = GameObject.Find("Player").GetComponent<Transform>();
+        gm = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
     }
 
     private void Update()
     {
-        if (gameObject.tag == "Enemy")
+        if (!gm.isPaused)
         {
-            NormalEnemyBehavior();
-        }
-        else if (gameObject.tag == "Knight Enemy")
-        {
-            enemyKnightLegsAnimator = GetComponentInChildren<Animator>();
-            KnightEnemyBehavior();
+            if (gameObject.tag == "Enemy")
+            {
+                NormalEnemyBehavior();
+            }
+            else if (gameObject.tag == "Knight Enemy")
+            {
+                enemyKnightLegsAnimator = GetComponentInChildren<Animator>();
+                KnightEnemyBehavior();
+            }
         }
     }
 

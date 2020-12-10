@@ -18,22 +18,24 @@ public class ThrowSword : MonoBehaviour
     private Ammo ammoScript;
     private EnemyController enemyControllerScript;
     private AudioSource objectAudio;
+    private GameMaster gm;
 
     private void Start()
     {
         ammoScript = GameObject.Find("Ammo Message").GetComponent<Ammo>();
         enemyControllerScript = gameObject.GetComponent<EnemyController>();
         objectAudio = GetComponent<AudioSource>();
+        gm = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (gameObject.tag == "Player" && Input.GetButtonDown("Fire1"))
+        if (gameObject.tag == "Player" && Input.GetButtonDown("Fire1") && !gm.isPaused)
         {
             PlayerThrow();
         }
-        else if (gameObject.tag == "Knight Enemy" && enemyControllerScript.playerDetected == true && waitedThreeSeconds == true)
+        else if (gameObject.tag == "Knight Enemy" && enemyControllerScript.playerDetected == true && waitedThreeSeconds == true && !gm.isPaused)
         {
             waitedThreeSeconds = false;
             StartCoroutine(EnemyThrow());

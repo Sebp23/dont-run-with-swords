@@ -72,22 +72,25 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        movement = new Vector3(input.x, 0, 0);
-        UpdatePlayerState();
-        ExecutePlayerState();
-
-        if (gameObject.transform.position.y <= respawnObject.transform.position.y)
+        if (!gm.isPaused)
         {
-            Respawn();
-        }
-        else
-        {
-            input.x = Input.GetAxisRaw("Horizontal");
-            input.y = Input.GetAxisRaw("Vertical");
-            ChangeSpriteDirection();
-        }
+            movement = new Vector3(input.x, 0, 0);
+            UpdatePlayerState();
+            ExecutePlayerState();
 
-        CheckAmmo();
+            if (gameObject.transform.position.y <= respawnObject.transform.position.y)
+            {
+                Respawn();
+            }
+            else
+            {
+                input.x = Input.GetAxisRaw("Horizontal");
+                input.y = Input.GetAxisRaw("Vertical");
+                ChangeSpriteDirection();
+            }
+
+            CheckAmmo();
+        }
     }
 
     void UpdatePlayerState()
