@@ -10,34 +10,36 @@ public class ThrowSword : MonoBehaviour
     private GameObject swordPrefab;
     [SerializeField]
     private AudioClip swordThrowSound;
+    [SerializeField]
+    private float enemyThrowCooldown = 2;
 
-    private bool waitedThreeSeconds = true;
+    private bool cooldownHasElapsed = true;
 
     private Vector3 playerPosition;
 
     private Ammo ammoScript;
     private EnemyController enemyControllerScript;
     private AudioSource objectAudio;
-    private GameMaster gm;
+    private GameMaster gameMaster;
 
     private void Start()
     {
         ammoScript = GameObject.Find("Ammo Message").GetComponent<Ammo>();
         enemyControllerScript = gameObject.GetComponent<EnemyController>();
         objectAudio = GetComponent<AudioSource>();
-        gm = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
+        gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (gameObject.tag == "Player" && Input.GetButtonDown("Fire1") && !gm.isPaused)
+        if (gameObject.tag == "Player" && Input.GetButtonDown("Fire1") && !gameMaster.isPaused)
         {
             PlayerThrow();
         }
-        else if (gameObject.tag == "Knight Enemy" && enemyControllerScript.playerDetected == true && waitedThreeSeconds == true && !gm.isPaused)
+        else if (gameObject.tag == "Knight Enemy" && enemyControllerScript.playerDetected && cooldownHasElapsed && !gameMaster.isPaused)
         {
-            waitedThreeSeconds = false;
+            cooldownHasElapsed = false;
             StartCoroutine(EnemyThrow());
         }
     }
@@ -55,10 +57,10 @@ public class ThrowSword : MonoBehaviour
 
     IEnumerator EnemyThrow()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(enemyThrowCooldown);
         objectAudio.PlayOneShot(swordThrowSound);
         Instantiate(swordPrefab, swordThrowPoint.position, swordThrowPoint.rotation);
-        waitedThreeSeconds = true;
+        cooldownHasElapsed = true;
 
     }
 }
