@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DontDestroy : MonoBehaviour
+public class DontDestroyMusic : MonoBehaviour
 {
+    /// <summary>
+    /// This class makes sure that there is only one instance of the background music
+    /// If there is more than one instance, then it will destroy the extra instance
+    /// </summary>
     private void Awake()
     {
         GameObject[] musicObjects = GameObject.FindGameObjectsWithTag("Music");

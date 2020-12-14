@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class PauseMessageController : MonoBehaviour
 {
-    private GameMaster gm;
+    private GameMaster gameMaster;
     private TMP_Text pauseText;
 
     // Start is called before the first frame update
     void Start()
     {
-        gm = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
+        gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
         pauseText = GetComponent<TMP_Text>();
 
         //disable the text when the scene starts
@@ -21,10 +21,12 @@ public class PauseMessageController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gm.isPaused)
+        //show pause message if the game is paused
+        if (gameMaster.isPaused)
         {
             pauseText.alpha = 1;
         }
+        //disable pause message if game is unpaused
         else
         {
             pauseText.alpha = 0;

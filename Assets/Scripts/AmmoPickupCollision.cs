@@ -7,6 +7,7 @@ public class AmmoPickupCollision : MonoBehaviour
     [Tooltip("How much ammo this pickup contains for the player")]
     [SerializeField]
     private float pickupAmount = 1;
+
     [Tooltip("What sound is played when the player picks up ammo")]
     [SerializeField]
     private AudioClip ammoPickupSound;

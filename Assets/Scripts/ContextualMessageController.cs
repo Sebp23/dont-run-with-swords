@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-
+//This is the observation pattern
 public class ContextualMessageController : MonoBehaviour
 {
+    [Tooltip("How long before the message fades")]
     [SerializeField]
     private float fadeOutDuration = 1.0f;
 
@@ -41,6 +42,11 @@ public class ContextualMessageController : MonoBehaviour
         canvasGroup.alpha = 0;
     }
 
+    /// <summary>
+    /// When the message is triggered
+    /// </summary>
+    /// <param name="message">What message to display</param>
+    /// <param name="messageDuration">How long should the message be displayed</param>
     private void OnContextualMessageTriggered(string message, float messageDuration)
     {
         StopAllCoroutines();

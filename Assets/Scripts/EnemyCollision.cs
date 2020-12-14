@@ -11,6 +11,7 @@ public class EnemyCollision : MonoBehaviour
         characterControllerScript = gameObject.GetComponent<CharacterController>();
     }
 
+    //when the player collides with an enemy, respawn
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Knight Enemy")

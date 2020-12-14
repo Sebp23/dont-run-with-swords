@@ -5,28 +5,31 @@ using UnityEngine;
 
 public class Ammo : MonoBehaviour
 {
+    [Tooltip("The max amount of ammo that the player is allowed to have")]
     [SerializeField]
     public float maxAmmo = 5;
-    
+
+    [Tooltip("The current amount of ammo that the player has")]
     [SerializeField]
     public float currentAmmo;
 
     private TMP_Text ammoText;
-    private GameMaster gm;
+    private GameMaster gameMaster;
 
     // Start is called before the first frame update
     void Start()
     {
-        currentAmmo = 5;
+        currentAmmo = maxAmmo;
 
         ammoText = GetComponent<TMP_Text>();
-        gm = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
+        gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!gm.isPaused)
+        //only display ammo if game is not paused
+        if (!gameMaster.isPaused)
         {
             ammoText.alpha = 1;
             PrintAmmo();
@@ -37,6 +40,9 @@ public class Ammo : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Prints the amount of ammo that the player has to the ammo message in the UI canvas
+    /// </summary>
     private void PrintAmmo()
     {
         ammoText.text = currentAmmo.ToString();

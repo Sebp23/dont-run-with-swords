@@ -9,18 +9,23 @@ public class LevelEnd : MonoBehaviour
     [Tooltip("The sound that is played when the level end is triggered")]
     [SerializeField]
     private AudioClip levelEndSound;
+
     [Tooltip("How fast the cart and player move during the level end animation")]
     [SerializeField]
     private float cartSpeed;
+
     [Tooltip("How fast the wheels on the cart rotate during the level end animation")]
     [SerializeField]
     private float wheelRotateSpeed;
+
     [Tooltip("How high the player jumps to reach the cart seat during the level end animation")]
     [SerializeField]
     private float levelEndJumpHeight;
+
     [Tooltip("How long to wait before the next level is loaded")]
     [SerializeField]
     private float transitionWaitTime = 2f;
+
     [Tooltip("How long to wait after the player jumps to begin moving the cart")]
     [SerializeField]
     private float levelEndAnimationWaitTime = 1.5f;
@@ -32,18 +37,21 @@ public class LevelEnd : MonoBehaviour
     [Tooltip("The transform of the player object")]
     [SerializeField]
     private Transform playerObjectTransform;
+
     [Tooltip("The animator for the player's legs")]
     [SerializeField]
     private Animator playerLegsAnimator;
+
     [Tooltip("The cart's right wheel")]
     [SerializeField]
     private GameObject cartWheelRight;
+
     [Tooltip("The cart's left wheel")]
     [SerializeField]
     private GameObject cartWheelLeft;
 
     private Transform playerSpawn;
-    private GameMaster gm;
+    private GameMaster gameMaster;
     private AudioSource cartAudio;
     private AudioSource backgroundMusic;
     private CharacterController characterControllerScript;
@@ -58,7 +66,7 @@ public class LevelEnd : MonoBehaviour
         //get all required components
         playerObjectTransform = GameObject.Find("Player").GetComponent<Transform>();
         playerSpawn = GameObject.Find("Player Spawn").GetComponent<Transform>();
-        gm = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
+        gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
         cartAudio = GetComponent<AudioSource>();
         backgroundMusic = GameObject.Find("BackgroundMusic").GetComponent<AudioSource>();
         characterControllerScript = GameObject.Find("Player").GetComponent<CharacterController>();
@@ -95,8 +103,8 @@ public class LevelEnd : MonoBehaviour
     private void PlayerJumpOnCart()
     {
         var jumpVector = new Vector2(0f, levelEndJumpHeight);
-        characterControllerScript.playerRB.velocity = new Vector2(jumpVector.x, 0f);
-        characterControllerScript.playerRB.AddForce(jumpVector, ForceMode2D.Impulse);
+        characterControllerScript.playerRigidbody.velocity = new Vector2(jumpVector.x, 0f);
+        characterControllerScript.playerRigidbody.AddForce(jumpVector, ForceMode2D.Impulse);
 
     }
 
@@ -135,7 +143,7 @@ public class LevelEnd : MonoBehaviour
         cartAudio.PlayOneShot(levelEndSound);
         yield return new WaitForSeconds(2f);
         backgroundMusic.Play();
-        gm.lastCheckPointPosition = playerSpawn.position;
+        gameMaster.lastCheckPointPosition = playerSpawn.position;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

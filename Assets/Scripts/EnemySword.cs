@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class EnemySword : MonoBehaviour
 {
+    [Tooltip("How fast the enemy knight's sword will travel")]
     [SerializeField]
     private float speed = 20f;
 
-    private Rigidbody2D rigidbody;
-    private Transform target;
-    private Vector2 targetDirection;
+    [Tooltip("How many seconds before the enemy sword destroys itself")]
+    [SerializeField]
+    private float secondsBeforeDestroy = 5f;
+
+    private Rigidbody2D enemySwordRigidbody;
+    private Transform enemySwordTarget;
 
     private CharacterController characterControllerScript;
 
@@ -18,19 +22,25 @@ public class EnemySword : MonoBehaviour
     {
         characterControllerScript = GameObject.Find("Player").GetComponent<CharacterController>();
 
-        rigidbody = GetComponent<Rigidbody2D>();
-        target = GameObject.Find("Player").GetComponent<Transform>();
-        targetDirection = (target.transform.position - transform.position).normalized;
+        enemySwordRigidbody = GetComponent<Rigidbody2D>();
+        enemySwordTarget = GameObject.Find("Player").GetComponent<Transform>();
 
         //code credit to Sharad Khanna https://stackoverflow.com/questions/49567202/how-to-make-a-2d-sprite-rotate-towards-a-specific-point-while-facing-perpendicul
-        var dir = target.transform.position - gameObject.transform.position;
+
+        //get the direction that the sword must travel based on the distance between the player and the sword
+        var dir = enemySwordTarget.transform.position - gameObject.transform.position;
+        //get the angle that the sword must rotate to face the player direction
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
+        //rotate the sword to face the correct direction
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        rigidbody.velocity = rigidbody.transform.right * speed;
-        Destroy(gameObject, 5f);
+        //set the velocity of the sword
+        enemySwordRigidbody.velocity = enemySwordRigidbody.transform.right * speed;
+        //destroy the sword after a certain amount of seconds
+        Destroy(gameObject, secondsBeforeDestroy);
     }
 
+    //if the enemy sword hits the player, then respawn the player
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Player")
