@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThrowSword : MonoBehaviour
+public class EnemyThrowSword : MonoBehaviour
 {
     [Tooltip("The position in the game space from where the sword is instantiated")]
     [SerializeField]
@@ -15,70 +15,73 @@ public class ThrowSword : MonoBehaviour
     [Tooltip("The sound used when the sword is thrown")]
     [SerializeField]
     private AudioClip swordThrowSound;
-    
+
     [Tooltip("The number of seconds in between each enemy sword throw")]
     [SerializeField]
     private float enemyThrowCooldown = 2;
 
+    [Tooltip("How long should the enemy knight's tell last before the sword is thrown")]
+    [SerializeField]
+    private float enemyKnightTellSeconds = 0.5f;
+
     //if the cooldown has finished
     private bool cooldownHasElapsed = true;
 
-    private Ammo ammoScript;
     private EnemyController enemyControllerScript;
     private AudioSource objectAudio; //This is the audio source that will handle the sword throwing sound since this script is used for both player and enemy, the source may differ between the objects
+    private GameObject enemyKnightThrowTellSprite;
     private GameMaster gameMaster;
 
-    private void Start()
+    // Start is called before the first frame update
+    void Start()
     {
-        ammoScript = GameObject.Find("Ammo Message").GetComponent<Ammo>();
+
         enemyControllerScript = gameObject.GetComponent<EnemyController>();
         objectAudio = GetComponent<AudioSource>();
+        enemyKnightThrowTellSprite = transform.Find("EnemyKnightThrowTell").gameObject;
         gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
+
+        enemyKnightThrowTellSprite.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if the object this script is attached to is the player and they click the fire button, and the game is not paused, then throw the sword
-        if (gameObject.tag == "Player" && Input.GetButtonDown("Fire1") && !gameMaster.isPaused)
-        {
-            PlayerThrow();
-        }
+
         //if the object this script is attached to is an enemy knight and they detect the player, and the cooldown is over, and the game is not paused, then throw the sword
-        else if (gameObject.tag == "Knight Enemy" && enemyControllerScript.playerDetected && cooldownHasElapsed && !gameMaster.isPaused)
+        if (gameObject.tag == "Knight Enemy" && enemyControllerScript.playerDetected && cooldownHasElapsed && !gameMaster.isPaused)
         {
             //reset the cooldown
             cooldownHasElapsed = false;
-            StartCoroutine(EnemyThrow());
+            StartCoroutine(EnemyThrowCooldown());
         }
     }
 
+
     /// <summary>
-    /// This method is what instantiates the sword if the player ammo is above 0
-    /// The velocity of the sword is controlled by the Sword.cs script
+    /// This IEnumerator is the cooldown time before the enemy throws their sword
+    /// It then calls on the IEnumerator to throw the sword
     /// </summary>
-    void PlayerThrow()
+    /// <returns>Number of seconds before the cooldown</returns>
+    IEnumerator EnemyThrowCooldown()
     {
-        if (ammoScript.currentAmmo <= ammoScript.maxAmmo && ammoScript.currentAmmo > 0)
-        {
-            objectAudio.PlayOneShot(swordThrowSound);
-            //sword throwing logic
-            Instantiate(swordPrefab, swordThrowPoint.position, swordThrowPoint.rotation);
-            ammoScript.currentAmmo--;
-        }   
+        yield return new WaitForSeconds(enemyThrowCooldown);
+        StartCoroutine(ThrowEnemySword());
+
     }
 
     /// <summary>
-    /// This is the IEnumerator that instantiates the enemy's sword after their cooldown
-    /// The velocity of the enemy sword is controlled by the EnemySword.cs script.
+    /// This IEnumerator throws the sword
+    /// It also shows an exclamation mark (the tell) for a certain number of seconds before the sword is thrown
     /// </summary>
     /// <returns></returns>
-    IEnumerator EnemyThrow()
+    IEnumerator ThrowEnemySword()
     {
-        yield return new WaitForSeconds(enemyThrowCooldown);
+        enemyKnightThrowTellSprite.SetActive(true);
+        yield return new WaitForSeconds(enemyKnightTellSeconds);
         objectAudio.PlayOneShot(swordThrowSound);
         Instantiate(swordPrefab, swordThrowPoint.position, swordThrowPoint.rotation);
         cooldownHasElapsed = true;
-
+        enemyKnightThrowTellSprite.SetActive(false);
     }
 }
