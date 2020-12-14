@@ -12,6 +12,7 @@ public class GroundCollision : MonoBehaviour
         characterControllerScript = gameObject.GetComponent<CharacterController>();
     }
 
+    //check to see if player is on the ground
     private void OnCollisionStay2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Ground"))
@@ -20,6 +21,7 @@ public class GroundCollision : MonoBehaviour
         }
     }
 
+    //when the player leaves the ground (jump/fall/etc)
     private void OnCollisionExit2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Ground"))

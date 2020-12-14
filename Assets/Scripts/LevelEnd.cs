@@ -6,25 +6,39 @@ using UnityEngine.SceneManagement;
 
 public class LevelEnd : MonoBehaviour
 {
+    [Tooltip("The sound that is played when the level end is triggered")]
     [SerializeField]
     private AudioClip levelEndSound;
+    [Tooltip("How fast the cart and player move during the level end animation")]
     [SerializeField]
     private float cartSpeed;
+    [Tooltip("How fast the wheels on the cart rotate during the level end animation")]
     [SerializeField]
     private float wheelRotateSpeed;
+    [Tooltip("How high the player jumps to reach the cart seat during the level end animation")]
     [SerializeField]
     private float levelEndJumpHeight;
+    [Tooltip("How long to wait before the next level is loaded")]
+    [SerializeField]
+    private float transitionWaitTime = 2f;
+    [Tooltip("How long to wait after the player jumps to begin moving the cart")]
+    [SerializeField]
+    private float levelEndAnimationWaitTime = 1.5f;
 
     public bool levelComplete = false;
-    public bool playerOnCart = false;
     public bool transitionIntialized = false;
+    private bool playerOnCart = false;
 
+    [Tooltip("The transform of the player object")]
     [SerializeField]
-    private Transform playerObject;
+    private Transform playerObjectTransform;
+    [Tooltip("The animator for the player's legs")]
     [SerializeField]
     private Animator playerLegsAnimator;
+    [Tooltip("The cart's right wheel")]
     [SerializeField]
     private GameObject cartWheelRight;
+    [Tooltip("The cart's left wheel")]
     [SerializeField]
     private GameObject cartWheelLeft;
 
@@ -36,29 +50,48 @@ public class LevelEnd : MonoBehaviour
 
     private void Start()
     {
+        //set all the level end bools to false to make sure the level doesn't end prematurely.
         playerOnCart = false;
         levelComplete = false;
         transitionIntialized = false;
-        playerObject = GameObject.Find("Player").GetComponent<Transform>();
+
+        //get all required components
+        playerObjectTransform = GameObject.Find("Player").GetComponent<Transform>();
         playerSpawn = GameObject.Find("Player Spawn").GetComponent<Transform>();
         gm = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
         cartAudio = GetComponent<AudioSource>();
         backgroundMusic = GameObject.Find("BackgroundMusic").GetComponent<AudioSource>();
         characterControllerScript = GameObject.Find("Player").GetComponent<CharacterController>();
+
+        //set the player legs animator to true to make sure animations work after level transition
         playerLegsAnimator.enabled = true;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
+        //when the level ends, and the player is on the cart, begin the level end animation
         if (levelComplete && playerOnCart)
         {
-            cartWheelRight.transform.Rotate(Vector3.back * Time.deltaTime * wheelRotateSpeed);
-            cartWheelLeft.transform.Rotate(Vector3.back * Time.deltaTime * wheelRotateSpeed);
-            gameObject.transform.position += Vector3.right * Time.deltaTime * cartSpeed;
-            playerObject.transform.position += Vector3.right * Time.deltaTime * cartSpeed;
+            AnimateLevelEnd();
         }
     }
 
+    /// <summary>
+    /// Start rotating the cart wheels and moving the cart. 
+    /// This is the animation that plays at the end of a level.
+    /// </summary>
+    private void AnimateLevelEnd()
+    {
+        cartWheelRight.transform.Rotate(Vector3.back * Time.deltaTime * wheelRotateSpeed);
+        cartWheelLeft.transform.Rotate(Vector3.back * Time.deltaTime * wheelRotateSpeed);
+        gameObject.transform.position += Vector3.right * Time.deltaTime * cartSpeed;
+        playerObjectTransform.transform.position += Vector3.right * Time.deltaTime * cartSpeed;
+    }
+
+    /// <summary>
+    /// Makes the player character automatically jump the correct height to land on the cart seat 
+    /// and begin the level end animation.
+    /// </summary>
     private void PlayerJumpOnCart()
     {
         var jumpVector = new Vector2(0f, levelEndJumpHeight);
@@ -67,6 +100,7 @@ public class LevelEnd : MonoBehaviour
 
     }
 
+    //this triggers the level end process
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Player" && !levelComplete)
@@ -77,6 +111,10 @@ public class LevelEnd : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// wait a few seconds before moving the cart to allow the animation to look smoother
+    /// </summary>
+    /// <returns>The amount of seconds waited</returns>
     public IEnumerator WaitToMove()
     {
         transitionIntialized = false;
@@ -86,6 +124,11 @@ public class LevelEnd : MonoBehaviour
         StartCoroutine(TransitionToNextLevel());
     }
 
+    /// <summary>
+    /// Play the level end achievment music 
+    /// then load the next scene after waiting a few seconds
+    /// </summary>
+    /// <returns>The amount of seconds waited</returns>
     IEnumerator TransitionToNextLevel()
     {
         backgroundMusic.Pause();

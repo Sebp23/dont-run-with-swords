@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class AmmoPickupCollision : MonoBehaviour
 {
+    [Tooltip("How much ammo this pickup contains for the player")]
     [SerializeField]
     private float pickupAmount = 1;
+    [Tooltip("What sound is played when the player picks up ammo")]
     [SerializeField]
     private AudioClip ammoPickupSound;
-
-    private bool ammoPickedUp = false;
 
     private Ammo ammoScript;
     private AudioSource playerAudio;
@@ -21,6 +21,7 @@ public class AmmoPickupCollision : MonoBehaviour
         playerAudio = GetComponent<AudioSource>();
     }
 
+    //when the player walks over an ammo pickup
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Ammo"))
