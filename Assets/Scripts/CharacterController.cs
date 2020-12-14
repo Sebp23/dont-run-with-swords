@@ -48,6 +48,7 @@ public class CharacterController : MonoBehaviour
     private Animator legsAnimator;
     private Vector3 movement;
     private Ammo ammoScript;
+    private LevelEnd levelEndScript;
     private GameMaster gm;
 
     
@@ -61,6 +62,7 @@ public class CharacterController : MonoBehaviour
         legsAnimator = GetComponentInChildren<Animator>();
         playerBlade = transform.Find("PlayerBlade").gameObject;
         ammoScript = GameObject.Find("Ammo Message").GetComponent<Ammo>();
+        levelEndScript = GameObject.Find("Cart (Level End Trigger)").GetComponent<LevelEnd>();
         gm = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
 
         //spawn the player at the checkpoint position
@@ -72,7 +74,7 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!gm.isPaused)
+        if (!gm.isPaused && !levelEndScript.levelComplete)
         {
             movement = new Vector3(input.x, 0, 0);
             UpdatePlayerState();
