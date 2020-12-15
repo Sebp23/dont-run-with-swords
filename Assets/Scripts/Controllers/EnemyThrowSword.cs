@@ -48,12 +48,18 @@ public class EnemyThrowSword : MonoBehaviour
     void Update()
     {
 
-        //if the object this script is attached to is an enemy knight and they detect the player, and the cooldown is over, and the game is not paused, then throw the sword
-        if (gameObject.tag == "Knight Enemy" && enemyControllerScript.playerDetected && cooldownHasElapsed && !gameMaster.isPaused)
+        //if the enemy knight detects the player, and the cooldown is over, and the game is not paused, then throw the sword
+        if (enemyControllerScript.playerDetected && cooldownHasElapsed && !gameMaster.isPaused)
         {
             //reset the cooldown
             cooldownHasElapsed = false;
             StartCoroutine(EnemyThrowCooldown());
+        }
+        //stop the sword throw process if the player is not detected and reset the cooldown
+        else if (!enemyControllerScript.playerDetected && !gameMaster.isPaused)
+        {
+            StopAllCoroutines();
+            cooldownHasElapsed = true;
         }
     }
 

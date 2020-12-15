@@ -30,6 +30,10 @@ public class LevelEnd : MonoBehaviour
     [SerializeField]
     private float levelEndAnimationWaitTime = 1.5f;
 
+    [Tooltip("Check this if this is the last level in the game")]
+    [SerializeField]
+    private bool lastLevel;
+
     public bool levelComplete = false;
     public bool transitionIntialized = false;
     private bool playerOnCart = false;
@@ -142,8 +146,19 @@ public class LevelEnd : MonoBehaviour
         backgroundMusic.Pause();
         cartAudio.PlayOneShot(levelEndSound);
         yield return new WaitForSeconds(2f);
-        backgroundMusic.Play();
-        gameMaster.lastCheckPointPosition = playerSpawn.position;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        //is this level the last level in the game?
+        if (lastLevel)
+        {
+            //Load the end menu when level is complete
+            SceneManager.LoadScene("EndMenu");
+            Debug.Log("Scene Loaded!");
+        }
+        else
+        {
+            //load the next level
+            backgroundMusic.Play();
+            gameMaster.lastCheckPointPosition = playerSpawn.position;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
     }
 }

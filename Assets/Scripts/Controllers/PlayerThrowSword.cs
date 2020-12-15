@@ -30,8 +30,8 @@ public class PlayerThrowSword : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if the object this script is attached to is the player and they click the fire button, and the game is not paused, then throw the sword
-        if (gameObject.tag == "Player" && Input.GetButtonDown("Fire1") && !gameMaster.isPaused)
+        //if the player clicks the fire button, and the game is not paused, then throw the sword
+        if (Input.GetButtonDown("Fire1") && !gameMaster.isPaused)
         {
             Debug.Log("Fire button clicked");
             PlayerThrow();
