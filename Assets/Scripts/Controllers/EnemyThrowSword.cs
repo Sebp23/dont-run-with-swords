@@ -59,6 +59,7 @@ public class EnemyThrowSword : MonoBehaviour
         else if (!enemyControllerScript.playerDetected && !gameMaster.isPaused)
         {
             StopAllCoroutines();
+            enemyKnightThrowTellSprite.SetActive(false);
             cooldownHasElapsed = true;
         }
     }
