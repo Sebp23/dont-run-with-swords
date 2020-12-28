@@ -1,32 +1,45 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GroundCollision : MonoBehaviour
 {
     private CharacterController characterControllerScript;
+    private EndMenuCharacterController endMenuCharacterControllerScript;
 
     // Start is called before the first frame update
     void Start()
     {
         characterControllerScript = gameObject.GetComponent<CharacterController>();
+        endMenuCharacterControllerScript = gameObject.GetComponent<EndMenuCharacterController>();
     }
 
     //check to see if player is on the ground
     private void OnCollisionStay2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Ground"))
+        if (other.gameObject.CompareTag("Ground") && SceneManager.GetActiveScene().name != "EndMenu")
         {
             characterControllerScript.PlayerOnGround = true;
+        }
+
+        if (other.gameObject.CompareTag("Ground") && SceneManager.GetActiveScene().name == "EndMenu")
+        {
+            endMenuCharacterControllerScript.PlayerOnGround = true;
         }
     }
 
     //when the player leaves the ground (jump/fall/etc)
     private void OnCollisionExit2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Ground"))
+        if (other.gameObject.CompareTag("Ground") && SceneManager.GetActiveScene().name != "EndMenu")
         {
             characterControllerScript.PlayerOnGround = false;
+        }
+
+        if (other.gameObject.CompareTag("Ground") && SceneManager.GetActiveScene().name == "EndMenu")
+        {
+            endMenuCharacterControllerScript.PlayerOnGround = false;
         }
     }
 }
