@@ -51,6 +51,10 @@ public class GameMaster : MonoBehaviour
         {
             AudioListener.pause = true;
             Time.timeScale = 0;
+            if (Input.GetKeyDown(KeyCode.X))
+            {
+                SceneManager.LoadScene("StartMenu");
+            }
         }
         //unpause
         else
