@@ -36,8 +36,8 @@ public class GameMaster : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().name != "Credits" && SceneManager.GetActiveScene().name != "StartMenu" && SceneManager.GetActiveScene().name != "EndMenu")
         {
             isPaused = !isPaused;
-            PauseGame();
         }
+        PauseGame();
     }
 
     /// <summary>
@@ -53,6 +53,9 @@ public class GameMaster : MonoBehaviour
             Time.timeScale = 0;
             if (Input.GetKeyDown(KeyCode.X))
             {
+                isPaused = false;
+                AudioListener.pause = false;
+                Time.timeScale = 1;
                 SceneManager.LoadScene("StartMenu");
             }
         }
