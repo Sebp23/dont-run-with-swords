@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameMaster : MonoBehaviour
 {
@@ -32,7 +33,7 @@ public class GameMaster : MonoBehaviour
     private void Update()
     {
         //if player hits esc, then pause the game or unpause the game
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().name != "Credits" && SceneManager.GetActiveScene().name != "StartMenu" && SceneManager.GetActiveScene().name != "EndMenu")
         {
             isPaused = !isPaused;
             PauseGame();

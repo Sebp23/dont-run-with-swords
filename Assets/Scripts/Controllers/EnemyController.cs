@@ -17,6 +17,10 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     private float detectDistance;
 
+    [Tooltip("Is the player in the scene? This is intended only for menu scenes and must be manually set false in editor")]
+    [SerializeField]
+    private bool playerInScene = true;
+
     private bool movingLeft = true;
     private bool facingRight = true;
     public bool playerDetected = false;
@@ -31,12 +35,18 @@ public class EnemyController : MonoBehaviour
     private Transform playerTransform;
     private Renderer enemyRenderer;
     private Animator enemyKnightLegsAnimator;
+
+    [SerializeField]
     private GameMaster gameMaster;
 
     private void Start()
     {
+        if (playerInScene)
+        {
+            playerTransform = GameObject.Find("Player").GetComponent<Transform>();
+        }
+
         enemyRenderer = gameObject.GetComponent<Renderer>();
-        playerTransform = GameObject.Find("Player").GetComponent<Transform>();
         gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
     }
 
@@ -53,8 +63,17 @@ public class EnemyController : MonoBehaviour
             //if it's a knight enemy
             else if (gameObject.tag == "Knight Enemy")
             {
-                enemyKnightLegsAnimator = GetComponentInChildren<Animator>();
-                KnightEnemyBehavior();
+                if (playerInScene)
+                {
+                    enemyKnightLegsAnimator = GetComponentInChildren<Animator>();
+                    KnightEnemyBehavior();
+                }
+                else
+                {
+                    enemyKnightLegsAnimator = GetComponentInChildren<Animator>();
+                    enemyKnightLegsAnimator.SetBool(enemyKnightWalking, true);
+                    NormalEnemyBehavior();
+                }
             }
         }
     }
