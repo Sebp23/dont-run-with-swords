@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Ammo : MonoBehaviour
 {
@@ -12,6 +13,10 @@ public class Ammo : MonoBehaviour
     [Tooltip("The current amount of ammo that the player has")]
     [SerializeField]
     public float currentAmmo;
+
+    [Tooltip("The ammo sprite next to ammo counter.")]
+    [SerializeField]
+    private CanvasGroup ammoSprite;
 
     private TMP_Text ammoText;
     private GameMaster gameMaster;
@@ -32,11 +37,13 @@ public class Ammo : MonoBehaviour
         if (!gameMaster.isPaused)
         {
             ammoText.alpha = 1;
+            ammoSprite.alpha = 1;
             PrintAmmo();
         }
         else
         {
             ammoText.alpha = 0;
+            ammoSprite.alpha = 0;
         }
     }
 
