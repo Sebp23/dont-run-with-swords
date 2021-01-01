@@ -18,7 +18,7 @@ public class EnemyThrowSword : MonoBehaviour
 
     [Tooltip("The number of seconds in between each enemy sword throw")]
     [SerializeField]
-    private float enemyThrowCooldown = 2;
+    private float enemyThrowCooldownTime = 1;
 
     [Tooltip("How long should the enemy knight's tell last before the sword is thrown")]
     [SerializeField]
@@ -72,7 +72,7 @@ public class EnemyThrowSword : MonoBehaviour
     /// <returns>Number of seconds before the cooldown</returns>
     IEnumerator EnemyThrowCooldown()
     {
-        yield return new WaitForSeconds(enemyThrowCooldown);
+        yield return new WaitForSeconds(enemyThrowCooldownTime);
         StartCoroutine(ThrowEnemySword());
 
     }
