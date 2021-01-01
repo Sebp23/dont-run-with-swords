@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameMaster : MonoBehaviour
 {
@@ -29,7 +30,6 @@ public class GameMaster : MonoBehaviour
         }
     }
 
-
     private void Update()
     {
         //if player hits esc, then pause the game or unpause the game
@@ -51,16 +51,9 @@ public class GameMaster : MonoBehaviour
         {
             AudioListener.pause = true;
             Time.timeScale = 0;
-            if (Input.GetKeyDown(KeyCode.X))
-            {
-                isPaused = false;
-                AudioListener.pause = false;
-                Time.timeScale = 1;
-                SceneManager.LoadScene("StartMenu");
-            }
         }
         //unpause
-        else
+        else if (!isPaused)
         {
             AudioListener.pause = false;
             Time.timeScale = 1;
