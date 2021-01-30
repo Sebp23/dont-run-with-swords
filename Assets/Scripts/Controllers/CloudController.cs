@@ -34,19 +34,14 @@ public class CloudController : MonoBehaviour
     {
         cloudPositionX = gameObject.transform.position.x;
         
-        if (cloudPositionX >= cloudEndPosition.position.x)
+        if (cloudPositionX <= cloudEndPosition.position.x)
         {
             gameObject.transform.position = cloudStartVector;
             
         }
         else
         {
-            transform.Translate(Vector2.right * cloudSpeed * Time.deltaTime);
+            transform.Translate(Vector2.left * cloudSpeed * Time.deltaTime);
         }
     }
-
-    //private void RespawnCloud()
-    //{
-    //    cloudPosition = cloudStartPosition.position.x;
-    //}
 }
