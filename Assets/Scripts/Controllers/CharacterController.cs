@@ -37,6 +37,7 @@ public class CharacterController : MonoBehaviour
     private bool facingRight = true;
 
     private bool playerOnGround = false;
+    private bool playerDeathAnimationStarted = false;
     //property for checking if the player is on the ground
     public bool PlayerOnGround
     {
@@ -47,6 +48,7 @@ public class CharacterController : MonoBehaviour
             legsAnimator.SetBool(playerOnGroundAnimParam, playerOnGround);
         }
     }
+    public bool playerDead;
 
     public Rigidbody2D playerRigidbody;
     private playerState state;
@@ -56,17 +58,21 @@ public class CharacterController : MonoBehaviour
     private Ammo ammoScript;
     private LevelEnd levelEndScript;
     private GameMaster gameMaster;
+    private PlayerDeathController playerDeathControllerScript;
 
     
     // Start is called before the first frame update
     void Start()
     {
+        playerDead = false;
+
         playerRigidbody = GetComponent<Rigidbody2D>();
         legsAnimator = GetComponentInChildren<Animator>();
         playerSword = transform.Find("PlayerBlade").gameObject;
         ammoScript = GameObject.Find("Ammo Message").GetComponent<Ammo>();
         levelEndScript = GameObject.Find("Cart (Level End Trigger)").GetComponent<LevelEnd>();
         gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
+        playerDeathControllerScript = gameObject.GetComponent<PlayerDeathController>();
 
         //spawn the player at the checkpoint position
         gameObject.transform.position = gameMaster.lastCheckPointPosition;
@@ -156,7 +162,12 @@ public class CharacterController : MonoBehaviour
     /// </summary>
     public void Respawn()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (!playerDeathAnimationStarted)
+        {
+            playerDeathAnimationStarted = true;
+            playerDeathControllerScript.StartCoroutine("BeginPlayerDeathEvent");
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
     /// <summary>

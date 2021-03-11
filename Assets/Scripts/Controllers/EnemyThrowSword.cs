@@ -28,6 +28,7 @@ public class EnemyThrowSword : MonoBehaviour
     private bool cooldownHasElapsed = true;
 
     private EnemyController enemyControllerScript;
+    private CharacterController characterControllerScript;
     private AudioSource objectAudio; //This is the audio source that will handle the sword throwing sound since this script is used for both player and enemy, the source may differ between the objects
     private GameObject enemyKnightThrowTellSprite;
     private GameMaster gameMaster;
@@ -37,6 +38,7 @@ public class EnemyThrowSword : MonoBehaviour
     {
 
         enemyControllerScript = gameObject.GetComponent<EnemyController>();
+        characterControllerScript = GameObject.Find("Player").GetComponent<CharacterController>();
         objectAudio = GetComponent<AudioSource>();
         enemyKnightThrowTellSprite = transform.Find("EnemyKnightThrowTell").gameObject;
         gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
@@ -57,6 +59,13 @@ public class EnemyThrowSword : MonoBehaviour
         }
         //stop the sword throw process if the player is not detected and reset the cooldown
         else if (!enemyControllerScript.playerDetected && !gameMaster.isPaused)
+        {
+            StopAllCoroutines();
+            enemyKnightThrowTellSprite.SetActive(false);
+            cooldownHasElapsed = true;
+        }
+        //if the player is dead
+        else if (characterControllerScript.playerDead)
         {
             StopAllCoroutines();
             enemyKnightThrowTellSprite.SetActive(false);
