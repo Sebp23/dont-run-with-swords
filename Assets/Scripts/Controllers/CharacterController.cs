@@ -9,7 +9,7 @@ public class CharacterController : MonoBehaviour
     /// <summary>
     /// An enum containing the possible player states
     /// </summary>
-    private enum playerState
+    public enum playerState
     {
         still, walking, jumping
     }
@@ -51,7 +51,7 @@ public class CharacterController : MonoBehaviour
     public bool playerDead;
 
     public Rigidbody2D playerRigidbody;
-    private playerState state;
+    public playerState state;
     private Vector2 playerInput;
     private Animator legsAnimator;
     private Vector3 playerMovement;
@@ -84,8 +84,8 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Only execute player states and everything else if game isn't paused and level isn't finished
-        if (!gameMaster.isPaused && !levelEndScript.levelComplete)
+        //Only execute player states and everything else if game isn't paused and level isn't finished and the player isn't dead
+        if (!gameMaster.isPaused && !levelEndScript.levelComplete && !playerDead)
         {
             //player movement vector based on player x input
             playerMovement = new Vector3(playerInput.x, 0, 0);

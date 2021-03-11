@@ -35,12 +35,12 @@ public class PlayerDeathController : MonoBehaviour
     public IEnumerator BeginPlayerDeathEvent()
     {
         yield return new WaitForEndOfFrame();
-
+        characterControllerScript.state = CharacterController.playerState.still;
         //TODO get rid of this magic number
         int i = 0;
         while (i < 8)
         {
-            gameObject.transform.Rotate(Vector3.back * Time.deltaTime * playerDeathRotateSpeed);
+            gameObject.transform.Rotate(Vector3.forward * Time.deltaTime * playerDeathRotateSpeed, Space.Self);
             yield return new WaitForFixedUpdate();
             Debug.Log("Loop Number: " + i);
             i++;
