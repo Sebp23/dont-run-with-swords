@@ -19,17 +19,21 @@ public class PlayerDeathController : MonoBehaviour
 
     private GameMaster gameMaster;
     private CharacterController characterControllerScript;
+    private PlayerThrowSword playerThrowSwordScript;
     private GameObject playerSword;
     private Animator playerLegsAnimator;
     private Rigidbody2D playerRigidbody;
+    private BoxCollider2D playerBoxCollider;
 
     // Start is called before the first frame update
     void Start()
     {
         gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
         characterControllerScript = gameObject.GetComponent<CharacterController>();
+        playerThrowSwordScript = gameObject.GetComponent<PlayerThrowSword>();
         playerLegsAnimator = GetComponentInChildren<Animator>();
         playerRigidbody = GetComponent<Rigidbody2D>();
+        playerBoxCollider = GetComponent<BoxCollider2D>();
     }
 
     public IEnumerator BeginPlayerDeathEvent()
@@ -44,25 +48,11 @@ public class PlayerDeathController : MonoBehaviour
             yield return new WaitForFixedUpdate();
             Debug.Log("Loop Number: " + i);
             i++;
-
-            //gameObject.transform.Rotate(Vector3.back * Time.deltaTime * playerDeathRotateSpeed);
-            //if (gameObject.transform.rotation.z <= -90)
-            //{
-            //    playerRotateComplete = true;
-            //    //yield return new WaitForEndOfFrame();
-            //    Debug.Log("Animation Complete");
-            //}
-            //else
-            //{
-            //    playerRotateComplete = false;
-            //    gameObject.transform.Rotate(Vector3.back * Time.deltaTime * playerDeathRotateSpeed);
-            //}
-
-
-
-
         }
-        //gameMaster.isPaused = true;
+        yield return new WaitForSeconds(0.1f);
+        playerRigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+        playerBoxCollider.enabled = false;
+        playerThrowSwordScript.PlayerDeathThrow();
         yield return new WaitForSeconds(3);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }

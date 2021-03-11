@@ -28,7 +28,7 @@ public class CharacterController : MonoBehaviour
 
     [Tooltip("The player's sword")]
     [SerializeField]
-    private GameObject playerSword;
+    public GameObject playerSword;
 
     //animator parameters
     private int playerWalking = Animator.StringToHash(nameof(playerWalking));

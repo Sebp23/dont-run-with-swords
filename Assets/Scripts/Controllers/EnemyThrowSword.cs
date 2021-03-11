@@ -50,8 +50,15 @@ public class EnemyThrowSword : MonoBehaviour
     void Update()
     {
 
+        //if the player is dead
+        if (characterControllerScript.playerDead)
+        {
+            StopAllCoroutines();
+            enemyKnightThrowTellSprite.SetActive(false);
+            cooldownHasElapsed = true;
+        }
         //if the enemy knight detects the player, and the cooldown is over, and the game is not paused, then throw the sword
-        if (enemyControllerScript.playerDetected && cooldownHasElapsed && !gameMaster.isPaused)
+        else if (enemyControllerScript.playerDetected && cooldownHasElapsed && !gameMaster.isPaused)
         {
             //reset the cooldown
             cooldownHasElapsed = false;
@@ -59,13 +66,6 @@ public class EnemyThrowSword : MonoBehaviour
         }
         //stop the sword throw process if the player is not detected and reset the cooldown
         else if (!enemyControllerScript.playerDetected && !gameMaster.isPaused)
-        {
-            StopAllCoroutines();
-            enemyKnightThrowTellSprite.SetActive(false);
-            cooldownHasElapsed = true;
-        }
-        //if the player is dead
-        else if (characterControllerScript.playerDead)
         {
             StopAllCoroutines();
             enemyKnightThrowTellSprite.SetActive(false);
