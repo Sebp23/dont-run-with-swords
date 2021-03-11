@@ -36,11 +36,12 @@ public class PlayerDeathController : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
 
+        //TODO get rid of this magic number
         int i = 0;
-        while (i < 11) //gameObject.transform.rotation.z >= -90)//!playerRotateComplete)
+        while (i < 8)
         {
             gameObject.transform.Rotate(Vector3.back * Time.deltaTime * playerDeathRotateSpeed);
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForFixedUpdate();
             Debug.Log("Loop Number: " + i);
             i++;
 
@@ -61,25 +62,8 @@ public class PlayerDeathController : MonoBehaviour
 
 
         }
-        gameMaster.isPaused = true;
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        //gameMaster.isPaused = true;
+        yield return new WaitForSeconds(3);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-
-    //public void BeginPlayerDeathProcess()
-    //{
-    //    while (gameObject.transform.rotation.z <= 90)
-    //    {
-    //        gameObject.transform.Rotate(Vector3.back * Time.deltaTime * playerDeathRotateSpeed);
-
-    //        //if(gameObject.transform.rotation.z <= -90 || gameObject.transform.rotation.z >= 90)
-    //        //{
-    //        //    playerRotateComplete = true;
-    //        //}
-    //        //else
-    //        //{
-    //        //    playerRotateComplete = false;
-    //        //}
-    //    }
-    //    //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    //}
 }
