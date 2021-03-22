@@ -16,6 +16,7 @@ public class EnemyCollision : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Knight Enemy")
         {
+            characterControllerScript.playerDead = true;
             characterControllerScript.Respawn();
         }
     }

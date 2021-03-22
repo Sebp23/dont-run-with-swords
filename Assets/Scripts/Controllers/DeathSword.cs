@@ -13,6 +13,10 @@ public class DeathSword : MonoBehaviour
     [SerializeField]
     private float deathSwordRotateSpeed = 5f;
 
+    [Tooltip("How long it takes before the scene reloads after sword collides with player")]
+    [SerializeField]
+    private float timeBeforeRespawn;
+
     private Rigidbody2D deathSwordRigidbody;
     private AudioSource cameraAudio;
     // Start is called before the first frame update
@@ -33,7 +37,7 @@ public class DeathSword : MonoBehaviour
 
     IEnumerator RespawnPlayerAfterAnimation()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(timeBeforeRespawn);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

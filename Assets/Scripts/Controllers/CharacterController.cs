@@ -35,6 +35,7 @@ public class CharacterController : MonoBehaviour
     private int playerOnGroundAnimParam = Animator.StringToHash(nameof(playerOnGround));
 
     private bool facingRight = true;
+    private bool playerFell = false;
 
     private bool playerOnGround = false;
     private bool playerDeathAnimationStarted = false;
@@ -84,29 +85,35 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Only execute player states and everything else if game isn't paused and level isn't finished and the player isn't dead
-        if (!gameMaster.isPaused && !levelEndScript.levelComplete && !playerDead)
+        if(!gameMaster.isPaused && !levelEndScript.levelComplete)
         {
-            //player movement vector based on player x input
-            playerMovement = new Vector3(playerInput.x, 0, 0);
-            UpdatePlayerState();
             ExecutePlayerState();
-
-            //if the player's y position on the axis is lower than the respawn object, then respawn the player
-            if (gameObject.transform.position.y <= respawnObject.transform.position.y)
+            //Only execute player states and everything else if game isn't paused and level isn't finished and the player isn't dead
+            if (!playerDead)
             {
-                Respawn();
-            }
-            else
-            {
-                //get the player input and change the direction of the player based on if they're moving left or right
-                playerInput.x = Input.GetAxisRaw("Horizontal");
-                ChangeSpriteDirection();
-            }
+                //player movement vector based on player x input
+                playerMovement = new Vector3(playerInput.x, 0, 0);
+                UpdatePlayerState();
+                ExecutePlayerState();
 
-            //constantly check how much ammo the player has
-            CheckAmmo();
+                //if the player's y position on the axis is lower than the respawn object, then respawn the player
+                if (gameObject.transform.position.y <= respawnObject.transform.position.y)
+                {
+                    playerFell = true;
+                    Respawn();
+                }
+                else
+                {
+                    //get the player input and change the direction of the player based on if they're moving left or right
+                    playerInput.x = Input.GetAxisRaw("Horizontal");
+                    ChangeSpriteDirection();
+                }
+
+                //constantly check how much ammo the player has
+                CheckAmmo();
+            }
         }
+       
     }
 
     /// <summary>
@@ -166,10 +173,14 @@ public class CharacterController : MonoBehaviour
     /// </summary>
     public void Respawn()
     {
-        if (!playerDeathAnimationStarted)
+        if (!playerDeathAnimationStarted && !playerFell)
         {
             playerDeathAnimationStarted = true;
             playerDeathControllerScript.StartCoroutine("BeginPlayerDeathEvent");
+        }
+        else if (playerFell)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 
