@@ -29,4 +29,13 @@ public class DeathSword : MonoBehaviour
     {
         gameObject.transform.right = Vector3.Slerp(gameObject.transform.right, deathSwordRigidbody.velocity.normalized, Time.deltaTime * deathSwordRotateSpeed);
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Player")
+        {
+            Debug.Log("hit player");
+            deathSwordRigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
+    }
 }
