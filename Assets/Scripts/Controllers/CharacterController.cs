@@ -157,8 +157,12 @@ public class CharacterController : MonoBehaviour
     }
 
     /// <summary>
-    /// reload the scene
-    /// the game manager keeps track of where the player spawns
+    /// Call on the relevant death animation, which is likely scripted in a different class
+    /// Scene reload will happen in different script, likely where the relevant death animation ends.
+    /// Sword throw death animation (player gets stabbed by own sword) has scene reload in the DeathSword.cs script
+    /// which happens when the sword collides with the player as a trigger.
+    /// 
+    /// //TODO add description as to where scene reload happens for explode animation
     /// </summary>
     public void Respawn()
     {
@@ -166,7 +170,6 @@ public class CharacterController : MonoBehaviour
         {
             playerDeathAnimationStarted = true;
             playerDeathControllerScript.StartCoroutine("BeginPlayerDeathEvent");
-            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 

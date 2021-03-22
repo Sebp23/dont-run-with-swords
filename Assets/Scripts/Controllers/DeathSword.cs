@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DeathSword : MonoBehaviour
 {
@@ -30,12 +31,19 @@ public class DeathSword : MonoBehaviour
         gameObject.transform.right = Vector3.Slerp(gameObject.transform.right, deathSwordRigidbody.velocity.normalized, Time.deltaTime * deathSwordRotateSpeed);
     }
 
+    IEnumerator RespawnPlayerAfterAnimation()
+    {
+        yield return new WaitForSeconds(3);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Player")
         {
             Debug.Log("hit player");
             deathSwordRigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+            StartCoroutine(RespawnPlayerAfterAnimation());
         }
     }
 }

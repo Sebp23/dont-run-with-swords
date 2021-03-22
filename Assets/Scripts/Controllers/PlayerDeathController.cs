@@ -51,9 +51,6 @@ public class PlayerDeathController : MonoBehaviour
         }
         yield return new WaitForSeconds(0.1f);
         playerRigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
-        //playerBoxCollider.enabled = false;
-        playerThrowSwordScript.PlayerDeathThrow();
-        yield return new WaitForSeconds(3);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        playerThrowSwordScript.PlayerDeathThrow(); //scene reload happens at end of trigger event when DeathSword trigger collides with player box collider.
     }
 }
