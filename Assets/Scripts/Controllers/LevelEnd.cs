@@ -30,9 +30,10 @@ public class LevelEnd : MonoBehaviour
     [SerializeField]
     private float levelEndAnimationWaitTime = 1.5f;
 
+    private bool playerOnCart = false;
+
     public bool levelComplete = false;
     public bool transitionIntialized = false;
-    private bool playerOnCart = false;
 
     [Tooltip("The transform of the player object")]
     [SerializeField]

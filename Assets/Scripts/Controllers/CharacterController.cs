@@ -85,10 +85,11 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!gameMaster.isPaused && !levelEndScript.levelComplete)
+        //Only execute player states and everything else if game isn't paused and level isn't finished.
+        if (!gameMaster.isPaused && !levelEndScript.levelComplete)
         {
             ExecutePlayerState();
-            //Only execute player states and everything else if game isn't paused and level isn't finished and the player isn't dead
+            //Only execute player states and everything else if the player isn't dead
             if (!playerDead)
             {
                 //player movement vector based on player x input
