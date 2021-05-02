@@ -16,7 +16,15 @@ public class PlayerDeathController : MonoBehaviour
     [Tooltip("This is how many times a loop happens to determine the player's rotation during animation. It is good for fine-tuning the rotation to make the Z-Rotation as close to 90 as possible. The player should be flat on the ground.")]
     [SerializeField]
     private int rotationLoopNumberTotal;
-    
+
+    [Tooltip("Torque for when player gets killed mid-air")]
+    [SerializeField]
+    private float playerDeathTorque;
+
+    [Tooltip("Number of seconds to wait before respawn")]
+    [SerializeField]
+    private float secondsBeforeRespawn;
+
     public bool playerRotateComplete = false;
     private bool playerDeathAnimationComplete;
 
@@ -44,17 +52,34 @@ public class PlayerDeathController : MonoBehaviour
         yield return new WaitForEndOfFrame();
         characterControllerScript.state = CharacterController.playerState.still;
 
-        //the current loop number
-        int rotationLoopNumberCurrent = 0;
-        while (rotationLoopNumberCurrent < rotationLoopNumberTotal)
+        if (characterControllerScript.PlayerOnGround)
         {
-            gameObject.transform.Rotate(Vector3.forward * Time.deltaTime * playerDeathRotateSpeed, Space.Self);
-            yield return new WaitForFixedUpdate();
-            Debug.Log("Loop Number: " + rotationLoopNumberCurrent);
-            rotationLoopNumberCurrent++;
+            //the current loop number
+            int rotationLoopNumberCurrent = 0;
+            while (rotationLoopNumberCurrent < rotationLoopNumberTotal)
+            {
+                //rotate player so back is on ground
+                gameObject.transform.Rotate(Vector3.forward * Time.deltaTime * playerDeathRotateSpeed, Space.Self);
+                yield return new WaitForFixedUpdate();
+                Debug.Log("Loop Number: " + rotationLoopNumberCurrent);
+                rotationLoopNumberCurrent++;
+            }
+            yield return new WaitForSeconds(0.1f);
+            playerRigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+            playerThrowSwordScript.PlayerDeathThrow(); //scene reload happens at end of trigger event when DeathSword trigger collides with player box collider. This is in DeathSword.cs
         }
-        yield return new WaitForSeconds(0.1f);
-        playerRigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
-        playerThrowSwordScript.PlayerDeathThrow(); //scene reload happens at end of trigger event when DeathSword trigger collides with player box collider. This is in DeathSword.cs
+        else
+        {
+            //foreach(GameObject obj in bodyParts)
+            //{
+            //    Rigidbody2D objRigidbody = obj.GetComponent<Rigidbody2D>();
+            //    objRigidbody.constraints = RigidbodyConstraints2D.None;
+            //    objRigidbody.AddForce(bodyPartForce, ForceMode2D.Impulse);
+            //}
+            playerRigidbody.constraints = RigidbodyConstraints2D.None;
+            playerRigidbody.AddTorque(playerDeathTorque, ForceMode2D.Force);
+            yield return new WaitForSeconds(secondsBeforeRespawn);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 }

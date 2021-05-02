@@ -42,7 +42,7 @@ public class PlayerThrowSword : MonoBehaviour
     void Update()
     {
         //if the player clicks the fire button, and the game is not paused, then throw the sword
-        if (Input.GetButtonDown("Fire1") && !gameMaster.isPaused)
+        if (Input.GetButtonDown("Fire1") && !gameMaster.isPaused && !characterControllerScript.playerDead)
         {
             Debug.Log("Fire button clicked");
             PlayerThrow();
