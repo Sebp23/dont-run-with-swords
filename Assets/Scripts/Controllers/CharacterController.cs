@@ -34,7 +34,6 @@ public class CharacterController : MonoBehaviour
     private int playerWalking = Animator.StringToHash(nameof(playerWalking));
     private int playerOnGroundAnimParam = Animator.StringToHash(nameof(playerOnGround));
 
-    private bool facingRight = true;
     private bool playerFell = false;
 
     private bool playerOnGround = false;
@@ -50,6 +49,7 @@ public class CharacterController : MonoBehaviour
         }
     }
     public bool playerDead;
+    public bool facingRight = true;
 
     public Rigidbody2D playerRigidbody;
     public playerState state;

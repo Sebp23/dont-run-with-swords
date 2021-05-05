@@ -70,14 +70,16 @@ public class PlayerDeathController : MonoBehaviour
         }
         else
         {
-            //foreach(GameObject obj in bodyParts)
-            //{
-            //    Rigidbody2D objRigidbody = obj.GetComponent<Rigidbody2D>();
-            //    objRigidbody.constraints = RigidbodyConstraints2D.None;
-            //    objRigidbody.AddForce(bodyPartForce, ForceMode2D.Impulse);
-            //}
             playerRigidbody.constraints = RigidbodyConstraints2D.None;
-            playerRigidbody.AddTorque(playerDeathTorque, ForceMode2D.Force);
+            //The player will spin a different direction, based on which way they are facing.
+            if (characterControllerScript.facingRight)
+            {
+                playerRigidbody.AddTorque(playerDeathTorque, ForceMode2D.Force);
+            }
+            else
+            {
+                playerRigidbody.AddTorque(-playerDeathTorque, ForceMode2D.Force);
+            }
             yield return new WaitForSeconds(secondsBeforeRespawn);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
