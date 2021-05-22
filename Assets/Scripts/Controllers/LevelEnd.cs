@@ -8,7 +8,7 @@ public class LevelEnd : MonoBehaviour
 {
     [Tooltip("The sound that is played when the level end is triggered")]
     [SerializeField]
-    private AudioClip levelEndSound;
+    public AudioClip levelEndSound;
 
     [Tooltip("How fast the cart and player move during the level end animation")]
     [SerializeField]
@@ -53,8 +53,8 @@ public class LevelEnd : MonoBehaviour
 
     private Transform playerSpawn;
     private GameMaster gameMaster;
-    private AudioSource cartAudio;
-    private AudioSource backgroundMusic;
+    public AudioSource cartAudio;
+    public AudioSource backgroundMusic;
     private CharacterController characterControllerScript;
 
     private void Start()
@@ -116,6 +116,9 @@ public class LevelEnd : MonoBehaviour
         {
             levelComplete = true;
             transitionIntialized = true;
+            backgroundMusic.Pause();
+            cartAudio.PlayOneShot(levelEndSound);
+            backgroundMusic.Play();
             PlayerJumpOnCart();
         }
     }
@@ -126,6 +129,8 @@ public class LevelEnd : MonoBehaviour
     /// <returns>The amount of seconds waited</returns>
     public IEnumerator WaitToMove()
     {
+        characterControllerScript.PlayerOnGround = true;
+        playerLegsAnimator.SetBool(characterControllerScript.playerWalking, false);
         transitionIntialized = false;
         yield return new WaitForSeconds(1.5f);
         playerLegsAnimator.enabled = false;
@@ -140,13 +145,10 @@ public class LevelEnd : MonoBehaviour
     /// <returns>The amount of seconds waited</returns>
     IEnumerator TransitionToNextLevel()
     {
-        backgroundMusic.Pause();
-        cartAudio.PlayOneShot(levelEndSound);
         yield return new WaitForSeconds(2f); 
-        //load the next level
-        backgroundMusic.Play();
         //get the correct position to spawn the player in the next level (spawn location is the same in every level)
         gameMaster.lastCheckPointPosition = playerSpawn.position;
+        //load the next level
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

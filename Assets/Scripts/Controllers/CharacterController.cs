@@ -31,7 +31,7 @@ public class CharacterController : MonoBehaviour
     public GameObject playerSword;
 
     //animator parameters
-    private int playerWalking = Animator.StringToHash(nameof(playerWalking));
+    public int playerWalking = Animator.StringToHash(nameof(playerWalking));
     private int playerOnGroundAnimParam = Animator.StringToHash(nameof(playerOnGround));
 
     private bool playerFell = false;

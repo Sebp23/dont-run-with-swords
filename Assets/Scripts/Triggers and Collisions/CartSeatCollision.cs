@@ -14,9 +14,18 @@ public class CartSeatCollision : MonoBehaviour
     //when the player lands on the cart seat at the end of the level
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.tag == "Player" && levelEndScript.transitionIntialized)
+        if (other.gameObject.tag == "Player" /*&& levelEndScript.transitionIntialized*/)
         {
+            if (!levelEndScript.levelComplete)
+            {
+                levelEndScript.levelComplete = true;
+                levelEndScript.backgroundMusic.Pause();
+                levelEndScript.cartAudio.PlayOneShot(levelEndScript.levelEndSound);
+                levelEndScript.backgroundMusic.Play();
+            }
+            Debug.Log("Player on cart");
             StartCoroutine(levelEndScript.WaitToMove());
+            Debug.Log("Wait to move");
         }
     }
 }
