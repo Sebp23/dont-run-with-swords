@@ -23,6 +23,7 @@ public class EnemyController : MonoBehaviour
 
     private bool movingLeft = true;
     private bool facingRight = true;
+
     public bool playerDetected = false;
 
     [Tooltip("An empty object attached to the enemy object that detects the ground")]

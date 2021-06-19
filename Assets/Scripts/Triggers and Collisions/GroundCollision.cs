@@ -5,18 +5,20 @@ using UnityEngine.SceneManagement;
 
 public class GroundCollision : MonoBehaviour
 {
+    [SerializeField]
     private CharacterController characterControllerScript;
+    [SerializeField]
     private EndMenuCharacterController endMenuCharacterControllerScript;
 
     // Start is called before the first frame update
     void Start()
     {
-        characterControllerScript = gameObject.GetComponent<CharacterController>();
+        characterControllerScript = GameObject.Find("Player").GetComponent<CharacterController>();
         endMenuCharacterControllerScript = gameObject.GetComponent<EndMenuCharacterController>();
     }
 
     //check to see if player is on the ground
-    private void OnCollisionStay2D(Collision2D other)
+    private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Ground") && SceneManager.GetActiveScene().name != "EndMenu")
         {

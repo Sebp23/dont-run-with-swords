@@ -9,7 +9,7 @@ public class CharacterController : MonoBehaviour
     /// <summary>
     /// An enum containing the possible player states
     /// </summary>
-    private enum playerState
+    public enum playerState
     {
         still, walking, jumping
     }
@@ -28,15 +28,16 @@ public class CharacterController : MonoBehaviour
 
     [Tooltip("The player's sword")]
     [SerializeField]
-    private GameObject playerSword;
+    public GameObject playerSword;
 
     //animator parameters
-    private int playerWalking = Animator.StringToHash(nameof(playerWalking));
+    public int playerWalking = Animator.StringToHash(nameof(playerWalking));
     private int playerOnGroundAnimParam = Animator.StringToHash(nameof(playerOnGround));
 
-    private bool facingRight = true;
+    private bool playerFell = false;
 
     private bool playerOnGround = false;
+    private bool playerDeathAnimationStarted = false;
     //property for checking if the player is on the ground
     public bool PlayerOnGround
     {
@@ -47,26 +48,32 @@ public class CharacterController : MonoBehaviour
             legsAnimator.SetBool(playerOnGroundAnimParam, playerOnGround);
         }
     }
+    public bool playerDead;
+    public bool facingRight = true;
 
     public Rigidbody2D playerRigidbody;
-    private playerState state;
+    public playerState state;
     private Vector2 playerInput;
     private Animator legsAnimator;
     private Vector3 playerMovement;
     private Ammo ammoScript;
     private LevelEnd levelEndScript;
     private GameMaster gameMaster;
+    private PlayerDeathController playerDeathControllerScript;
 
     
     // Start is called before the first frame update
     void Start()
     {
+        playerDead = false;
+
         playerRigidbody = GetComponent<Rigidbody2D>();
         legsAnimator = GetComponentInChildren<Animator>();
         playerSword = transform.Find("PlayerBlade").gameObject;
         ammoScript = GameObject.Find("Ammo Message").GetComponent<Ammo>();
         levelEndScript = GameObject.Find("Cart (Level End Trigger)").GetComponent<LevelEnd>();
         gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
+        playerDeathControllerScript = gameObject.GetComponent<PlayerDeathController>();
 
         //spawn the player at the checkpoint position
         gameObject.transform.position = gameMaster.lastCheckPointPosition;
@@ -78,29 +85,36 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Only execute player states and everything else if game isn't paused and level isn't finished
+        //Only execute player states and everything else if game isn't paused and level isn't finished.
         if (!gameMaster.isPaused && !levelEndScript.levelComplete)
         {
-            //player movement vector based on player x input
-            playerMovement = new Vector3(playerInput.x, 0, 0);
-            UpdatePlayerState();
             ExecutePlayerState();
-
-            //if the player's y position on the axis is lower than the respawn object, then respawn the player
-            if (gameObject.transform.position.y <= respawnObject.transform.position.y)
+            //Only execute player states and everything else if the player isn't dead
+            if (!playerDead)
             {
-                Respawn();
-            }
-            else
-            {
-                //get the player input and change the direction of the player based on if they're moving left or right
-                playerInput.x = Input.GetAxisRaw("Horizontal");
-                ChangeSpriteDirection();
-            }
+                //player movement vector based on player x input
+                playerMovement = new Vector3(playerInput.x, 0, 0);
+                UpdatePlayerState();
+                ExecutePlayerState();
 
-            //constantly check how much ammo the player has
-            CheckAmmo();
+                //if the player's y position on the axis is lower than the respawn object, then respawn the player
+                if (gameObject.transform.position.y <= respawnObject.transform.position.y)
+                {
+                    playerFell = true;
+                    Respawn();
+                }
+                else
+                {
+                    //get the player input and change the direction of the player based on if they're moving left or right
+                    playerInput.x = Input.GetAxisRaw("Horizontal");
+                    ChangeSpriteDirection();
+                }
+
+                //constantly check how much ammo the player has
+                CheckAmmo();
+            }
         }
+       
     }
 
     /// <summary>
@@ -151,12 +165,24 @@ public class CharacterController : MonoBehaviour
     }
 
     /// <summary>
-    /// reload the scene
-    /// the game manager keeps track of where the player spawns
+    /// Call on the relevant death animation, which is likely scripted in a different class
+    /// Scene reload will happen in different script, likely where the relevant death animation ends.
+    /// Sword throw death animation (player gets stabbed by own sword) has scene reload in the DeathSword.cs script
+    /// which happens when the sword collides with the player as a trigger.
+    /// 
+    /// //TODO add description as to where scene reload happens for explode animation
     /// </summary>
     public void Respawn()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (!playerDeathAnimationStarted && !playerFell)
+        {
+            playerDeathAnimationStarted = true;
+            playerDeathControllerScript.StartCoroutine("BeginPlayerDeathEvent");
+        }
+        else if (playerFell)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
     /// <summary>

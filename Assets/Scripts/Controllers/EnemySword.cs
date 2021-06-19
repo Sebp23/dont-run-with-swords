@@ -46,6 +46,7 @@ public class EnemySword : MonoBehaviour
         if (other.tag == "Player")
         {
             Debug.Log(other.name);
+            characterControllerScript.playerDead = true;
             characterControllerScript.Respawn();
             Destroy(gameObject);
         }
