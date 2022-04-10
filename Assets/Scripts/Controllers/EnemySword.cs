@@ -16,6 +16,7 @@ public class EnemySword : MonoBehaviour
     private Transform enemySwordTarget;
 
     private CharacterController characterControllerScript;
+    private GameMaster gameMasterScript;
 
     // Start is called before the first frame update
     void Start()
@@ -46,8 +47,12 @@ public class EnemySword : MonoBehaviour
         if (other.tag == "Player")
         {
             Debug.Log(other.name);
+            characterControllerScript.killingSwordPosition = gameObject.transform.position.x;
+            Debug.Log(characterControllerScript.killingSwordPosition);
             characterControllerScript.playerDead = true;
+            Debug.Log(characterControllerScript.playerDead);
             characterControllerScript.Respawn();
+            Debug.Log("Respawn Started");
             Destroy(gameObject);
         }
     }

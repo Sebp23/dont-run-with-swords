@@ -50,6 +50,7 @@ public class CharacterController : MonoBehaviour
     }
     public bool playerDead;
     public bool facingRight = true;
+    public float killingSwordPosition = 0;
 
     public Rigidbody2D playerRigidbody;
     public playerState state;
@@ -178,6 +179,7 @@ public class CharacterController : MonoBehaviour
         {
             playerDeathAnimationStarted = true;
             playerDeathControllerScript.StartCoroutine("BeginPlayerDeathEvent");
+            Debug.Log("Death event started");
         }
         else if (playerFell)
         {

@@ -11,6 +11,7 @@ public class GameMaster : MonoBehaviour
     //is the game paused?
     public bool isPaused;
 
+
     //there should be only 1 instance of the gamemaster when the game is launched
     //The GameMaster instance keeps track of where the player spawns and whether or not the game is paused
     private static GameMaster instance;
